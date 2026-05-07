@@ -1,41 +1,90 @@
 export default function Home() {
+  const teamMembers = [
+    {
+      name: "Samantha William",
+      email: "samantha@gmail.com",
+      role: "Student",
+    },
+    {
+      name: "Adam Smith",
+      email: "adamsmith@gmail.com",
+      role: "Student",
+    },
+    {
+      name: "Deven Lane",
+      email: "info@devenlane.com",
+      role: "Student",
+    },
+    {
+      name: "Annette Black",
+      email: "account@annette.com",
+      role: "Student",
+    },
+  ];
+
   return (
-    <main className="p-10">
-      <h1 className="text-4xl font-bold mb-10">Team</h1>
+    <main className="flex min-h-screen bg-gray-100 text-slate-900">
+      <aside className="w-64 bg-white p-6">
+        <h1 className="text-3xl font-bold mb-10">Shiko</h1>
 
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-4">
-          Invite team member
-        </h2>
+        <nav className="flex flex-col gap-4 text-sm">
+          <p>Dashboard</p>
+          <p>Courses</p>
+          <p>Calendar</p>
+          <p>Live Class</p>
 
-        <div className="flex gap-4">
-          <input
-            type="text"
-            placeholder="name@example.com"
-            className="border p-3 rounded w-80"
-          />
+          <div className="mt-10 flex flex-col gap-4">
+            <p>Profile</p>
+            <p className="text-orange-500 font-bold">Team</p>
+            <p>Settings</p>
+          </div>
+        </nav>
+      </aside>
 
-          <button className="bg-orange-500 text-white px-6 py-3 rounded">
-            Send Invite
-          </button>
+      <section className="flex-1 p-10">
+        <h1 className="text-4xl font-bold mb-10">Team</h1>
+
+        <div className="bg-white p-6 rounded-xl mb-10">
+          <h2 className="text-2xl font-semibold mb-4">
+            Invite team member
+          </h2>
+
+          <div className="flex gap-4">
+            <input
+              type="text"
+              placeholder="name@example.com"
+              className="border p-3 rounded w-80"
+            />
+
+            <button className="bg-orange-500 text-white px-6 py-3 rounded">
+              Send Invite
+            </button>
+          </div>
+
+          <p className="mt-3 text-sm font-medium">+ Add another</p>
         </div>
-      </section>
 
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          Team members
-        </h2>
+        <div className="bg-white p-6 rounded-xl">
+          <h2 className="text-2xl font-semibold mb-6">Team members</h2>
 
-        <div className="border p-4 rounded mb-4">
-          <p className="font-bold">Samantha William</p>
-          <p>samantha@gmail.com</p>
-          <p>Student</p>
-        </div>
+          <div className="flex flex-col gap-4">
+            {teamMembers.map((member) => (
+              <div
+                key={member.email}
+                className="border p-4 rounded flex justify-between items-center"
+              >
+                <div>
+                  <p className="font-bold">{member.name}</p>
+                  <p>{member.email}</p>
+                  <p>{member.role}</p>
+                </div>
 
-        <div className="border p-4 rounded">
-          <p className="font-bold">Adam Smith</p>
-          <p>adamsmith@gmail.com</p>
-          <p>Student</p>
+                <button className="text-red-500 font-semibold">
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </main>
