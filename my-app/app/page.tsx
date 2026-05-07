@@ -45,12 +45,26 @@ export default function Home() {
       </aside>
 
       <section className="flex-1 p-10">
-        <h1 className="text-4xl font-bold mb-10">Team</h1>
+        <h1 className="text-4xl font-bold mb-6">Team</h1>
+
+        <div className="flex gap-8 mb-8 text-sm text-gray-500">
+          <p>General</p>
+
+          <p className="bg-slate-800 text-white px-5 py-2 rounded-lg">
+            Team
+          </p>
+
+          <p>Password</p>
+
+          <p>Notification</p>
+        </div>
 
         <TeamInviteForm />
 
         <div className="bg-white p-6 rounded-xl">
-          <h2 className="text-2xl font-semibold mb-6">Team members</h2>
+          <h2 className="text-2xl font-semibold mb-6">
+            Team members
+          </h2>
 
           <div className="flex flex-col gap-4">
             {teamMembers.map((member) => (
