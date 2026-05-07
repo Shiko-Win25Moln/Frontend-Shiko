@@ -1,3 +1,5 @@
+import TeamMemberCard from "@/Components/Team/TeamMemberCard";
+
 export default function Home() {
   const teamMembers = [
     {
@@ -69,20 +71,12 @@ export default function Home() {
 
           <div className="flex flex-col gap-4">
             {teamMembers.map((member) => (
-              <div
+              <TeamMemberCard
                 key={member.email}
-                className="border p-4 rounded flex justify-between items-center"
-              >
-                <div>
-                  <p className="font-bold">{member.name}</p>
-                  <p>{member.email}</p>
-                  <p>{member.role}</p>
-                </div>
-
-                <button className="text-red-500 font-semibold">
-                  Delete
-                </button>
-              </div>
+                name={member.name}
+                email={member.email}
+                role={member.role}
+              />
             ))}
           </div>
         </div>
