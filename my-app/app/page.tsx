@@ -1,5 +1,6 @@
 import TeamMemberCard from "@/Components/Team/TeamMemberCard";
 import TeamInviteForm from "@/Components/Team/TeamInviteForm";
+import TeamSidebar from "@/Components/Team/TeamSidebar";
 
 export default function Home() {
   const teamMembers = [
@@ -27,22 +28,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen bg-gray-100 text-slate-900">
-      <aside className="w-64 bg-white p-6">
-        <h1 className="text-3xl font-bold mb-10">Shiko</h1>
-
-        <nav className="flex flex-col gap-4 text-sm">
-          <p>Dashboard</p>
-          <p>Courses</p>
-          <p>Calendar</p>
-          <p>Live Class</p>
-
-          <div className="mt-10 flex flex-col gap-4">
-            <p>Profile</p>
-            <p className="text-orange-500 font-bold">Team</p>
-            <p>Settings</p>
-          </div>
-        </nav>
-      </aside>
+      <TeamSidebar />
 
       <section className="flex-1 p-10">
         <h1 className="text-4xl font-bold mb-6">Team</h1>
