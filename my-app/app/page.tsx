@@ -1,7 +1,7 @@
 import TeamMemberCard from "@/Components/Team/TeamMemberCard";
 import TeamInviteForm from "@/Components/Team/TeamInviteForm";
 import TeamSidebar from "@/Components/Team/TeamSidebar";
-import NotificationCard from "@/Components/Team/NotificationCard";
+import NotificationsList from "@/Components/Team/NotificationsList";
 
 export default function Home() {
   const teamMembers = [
@@ -27,19 +27,7 @@ export default function Home() {
     },
   ];
 
-  const notifications = [
-    {
-      title: "Invitation sent",
-      message: "Your invitation was sent successfully.",
-      time: "2 min ago",
-    },
-    {
-      title: "New team member",
-      message: "Adam Smith joined the team.",
-      time: "10 min ago",
-    },
-  ];
-
+ 
   return (
     <main className="flex min-h-screen bg-gray-100 text-slate-900">
       <TeamSidebar />
@@ -77,23 +65,8 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        <div className="bg-white p-6 rounded-xl mt-10">
-          <h2 className="text-2xl font-semibold mb-6">
-            Notifications
-          </h2>
-
-          <div className="flex flex-col gap-4">
-            {notifications.map((notification, index) => (
-              <NotificationCard
-                key={index}
-                title={notification.title}
-                message={notification.message}
-                time={notification.time}
-              />
-            ))}
-          </div>
-        </div>
+       <NotificationsList />
+      
       </section>
     </main>
   );
