@@ -1,13 +1,13 @@
 type NotificationCardProps = {
   title: string;
   message: string;
-  time: string;
+  time?: string;
 };
 
 export default function NotificationCard({
   title,
   message,
-  time,
+  time = "Now",
 }: NotificationCardProps) {
   return (
     <div className="bg-white p-4 rounded-xl border">

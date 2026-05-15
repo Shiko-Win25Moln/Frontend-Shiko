@@ -6,14 +6,38 @@ export default function TeamInviteForm() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  function handleInvite() {
+  async function handleInvite() {
     if (!email) {
       setMessage("Please enter an email");
       return;
     }
 
-    setMessage(`Invitation sent to ${email}`);
-    setEmail("");
+    try {
+      const response = await fetch(
+        "https://localhost:7180/api/Invitations",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+          id: 0,
+          email: email,
+          status: "Pending",
+        }),
+        }
+      );
+
+      if (response.ok) {
+        setMessage(`Invitation sent to ${email}`);
+        setEmail("");
+      } else {
+        setMessage("Failed to send invitation");
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("Something went wrong");
+    }
   }
 
   return (
