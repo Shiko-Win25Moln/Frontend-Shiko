@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type TeamMemberCardProps = {
   name: string;
   email: string;
@@ -9,17 +11,59 @@ export default function TeamMemberCard({
   email,
   role,
 }: TeamMemberCardProps) {
+
+  function getAvatar() {
+    if (name.includes("Samantha")) {
+      return "/images/authors/samantha.svg";
+    }
+
+    if (name.includes("Adam")) {
+      return "/images/authors/adam.svg";
+    }
+
+    if (name.includes("Deven")) {
+      return "/images/authors/johnny.svg";
+    }
+
+    if (name.includes("Annette")) {
+      return "/images/authors/hasan.svg";
+    }
+
+    return "/images/authors/jasmin.svg";
+  }
+
   return (
-    <div className="border p-4 rounded flex justify-between items-center">
-      <div>
-        <p className="font-bold">{name}</p>
-        <p>{email}</p>
-        <p>{role}</p>
+    <div className="bg-white border rounded-xl p-4 flex items-center justify-between">
+      <div className="flex items-center gap-4">
+        
+        <Image
+          src={getAvatar()}
+          alt={name}
+          width={48}
+          height={48}
+          className="rounded-full"
+        />
+
+        <div>
+          <h3 className="font-semibold text-gray-900">
+            {name}
+          </h3>
+
+          <p className="text-sm text-gray-500">
+            {email}
+          </p>
+        </div>
       </div>
 
-      <button className="text-red-500 font-semibold">
-        Delete
-      </button>
+      <div className="flex items-center gap-10">
+        <p className="text-sm text-gray-500">
+          {role}
+        </p>
+
+        <button className="text-red-500 font-medium hover:text-red-600">
+          Delete
+        </button>
+      </div>
     </div>
   );
 }
