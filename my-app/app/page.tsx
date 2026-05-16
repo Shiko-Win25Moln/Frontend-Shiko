@@ -20,15 +20,38 @@ export default function Home() {
     fetch("http://localhost:5212/api/TeamMembers")
       .then((response) => response.json())
       .then((data) => setTeamMembers(data))
-      .catch((error) => console.error("Error fetching team members:", error));
+      .catch((error) =>
+        console.error("Error fetching team members:", error)
+      );
   }, []);
+
+  async function handleDelete(id: number) {
+    try {
+      const response = await fetch(
+        `http://localhost:5212/api/TeamMembers/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        setTeamMembers((previousMembers) =>
+          previousMembers.filter((member) => member.id !== id)
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting member:", error);
+    }
+  }
 
   return (
     <main className="flex min-h-screen bg-gray-100 text-slate-900">
       <TeamSidebar />
 
       <section className="flex-1 p-10">
-        <h1 className="text-4xl font-bold mb-6">Team</h1>
+        <h1 className="text-4xl font-bold mb-6">
+          Team
+        </h1>
 
         <div className="flex gap-8 mb-8 text-sm text-gray-500">
           <p>General</p>
@@ -51,7 +74,7 @@ export default function Home() {
 
           <div className="mb-4 px-2">
             <div className="grid grid-cols-[40px_1fr_120px_100px] text-sm text-gray-400 font-medium">
-              
+
               <div>
                 <input type="checkbox" />
               </div>
@@ -68,9 +91,11 @@ export default function Home() {
             {teamMembers.map((member) => (
               <TeamMemberCard
                 key={member.id}
+                id={member.id}
                 name={member.name}
                 email={member.email}
                 role={member.role}
+                onDelete={handleDelete}
               />
             ))}
           </div>

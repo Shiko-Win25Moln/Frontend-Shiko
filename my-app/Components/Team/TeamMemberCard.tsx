@@ -1,16 +1,21 @@
 import Image from "next/image";
 
 type TeamMemberCardProps = {
+  id: number;
   name: string;
   email: string;
   role: string;
+  onDelete: (id: number) => void;
 };
 
 export default function TeamMemberCard({
+  id,
   name,
   email,
   role,
+  onDelete,
 }: TeamMemberCardProps) {
+
   function getAvatar() {
     if (name.includes("Samantha")) {
       return "/images/authors/samantha.svg";
@@ -33,6 +38,7 @@ export default function TeamMemberCard({
 
   return (
     <div className="grid grid-cols-[40px_1fr_120px_100px] items-center bg-gray-50 rounded-xl px-4 py-3">
+
       <input type="checkbox" />
 
       <div className="flex items-center gap-4">
@@ -59,7 +65,10 @@ export default function TeamMemberCard({
         {role}
       </p>
 
-      <button className="text-sm font-medium text-gray-700 hover:text-red-500">
+      <button
+        onClick={() => onDelete(id)}
+        className="text-sm font-medium text-gray-700 hover:text-red-500"
+      >
         Delete
       </button>
     </div>
