@@ -5,28 +5,34 @@ import { useState } from "react";
 export default function TeamInviteForm() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
   async function handleInvite() {
-    if (!email) {
+    if (!email.trim()) {
       setMessage("Please enter an email");
       return;
     }
 
+    if (!email.includes("@")) {
+      setMessage("Please enter a valid email");
+      return;
+    }
+
+    setIsSending(true);
+    setMessage("");
+
     try {
-      const response = await fetch(
-        "http://localhost:5212/api/Invitations",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: 0,
-            email: email,
-            status: "Pending",
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:5273/api/Invitations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: 0,
+          email: email,
+          status: "Pending",
+        }),
+      });
 
       if (response.ok) {
         setMessage(`Invitation sent to ${email}`);
@@ -37,14 +43,14 @@ export default function TeamInviteForm() {
     } catch (error) {
       console.error(error);
       setMessage("Something went wrong");
+    } finally {
+      setIsSending(false);
     }
   }
 
   return (
     <div className="bg-white p-8 rounded-2xl mb-10">
-      
       <div className="flex justify-between gap-10">
-        
         <div className="max-w-xs">
           <h2 className="text-2xl font-semibold mb-2">
             Invite team member
@@ -57,10 +63,9 @@ export default function TeamInviteForm() {
         </div>
 
         <div className="flex-1">
-          
           <div className="flex gap-4">
             <input
-              type="text"
+              type="email"
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -69,9 +74,10 @@ export default function TeamInviteForm() {
 
             <button
               onClick={handleInvite}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg whitespace-nowrap"
+              disabled={isSending}
+              className="bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white px-6 py-3 rounded-lg whitespace-nowrap"
             >
-              Send Invite
+              {isSending ? "Sending..." : "Send Invite"}
             </button>
           </div>
 

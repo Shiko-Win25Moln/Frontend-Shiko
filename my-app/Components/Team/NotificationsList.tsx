@@ -14,7 +14,7 @@ export default function NotificationsList() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
-    fetch("https://localhost:7281/api/Notifications")
+    fetch("http://localhost:5098/api/Notifications")
       .then((response) => response.json())
       .then((data) => setNotifications(data))
       .catch((error) => console.error("Error fetching notifications:", error));
