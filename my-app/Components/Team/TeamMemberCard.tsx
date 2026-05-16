@@ -11,7 +11,6 @@ export default function TeamMemberCard({
   email,
   role,
 }: TeamMemberCardProps) {
-
   function getAvatar() {
     if (name.includes("Samantha")) {
       return "/images/authors/samantha.svg";
@@ -33,14 +32,15 @@ export default function TeamMemberCard({
   }
 
   return (
-    <div className="bg-white border rounded-xl p-4 flex items-center justify-between">
+    <div className="grid grid-cols-[40px_1fr_120px_100px] items-center bg-gray-50 rounded-xl px-4 py-3">
+      <input type="checkbox" />
+
       <div className="flex items-center gap-4">
-        
         <Image
           src={getAvatar()}
           alt={name}
-          width={48}
-          height={48}
+          width={44}
+          height={44}
           className="rounded-full"
         />
 
@@ -49,21 +49,19 @@ export default function TeamMemberCard({
             {name}
           </h3>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-400">
             {email}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-10">
-        <p className="text-sm text-gray-500">
-          {role}
-        </p>
+      <p className="text-sm text-gray-500">
+        {role}
+      </p>
 
-        <button className="text-red-500 font-medium hover:text-red-600">
-          Delete
-        </button>
-      </div>
+      <button className="text-sm font-medium text-gray-700 hover:text-red-500">
+        Delete
+      </button>
     </div>
   );
 }
