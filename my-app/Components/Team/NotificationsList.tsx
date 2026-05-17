@@ -10,19 +10,30 @@ type Notification = {
   isRead: boolean;
 };
 
-export default function NotificationsList() {
+type NotificationsListProps = {
+  refreshTrigger: number;
+};
+
+export default function NotificationsList({
+  refreshTrigger,
+}: NotificationsListProps) {
+
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:5098/api/Notifications")
       .then((response) => response.json())
       .then((data) => setNotifications(data))
-      .catch((error) => console.error("Error fetching notifications:", error));
-  }, []);
+      .catch((error) =>
+        console.error("Error fetching notifications:", error)
+      );
+  }, [refreshTrigger]);
 
   return (
     <div className="bg-white p-6 rounded-xl mt-8">
-      <h2 className="text-2xl font-semibold mb-6">Notifications</h2>
+      <h2 className="text-2xl font-semibold mb-6">
+        Notifications
+      </h2>
 
       <div className="flex flex-col gap-4">
         {notifications.map((notification) => (

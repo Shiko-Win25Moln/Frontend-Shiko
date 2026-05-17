@@ -15,6 +15,7 @@ type TeamMember = {
 
 export default function Home() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [refreshNotifications, setRefreshNotifications] = useState(0);
 
   useEffect(() => {
     fetch("http://localhost:5212/api/TeamMembers")
@@ -44,6 +45,10 @@ export default function Home() {
     }
   }
 
+  function handleInviteSent() {
+    setRefreshNotifications((previousValue) => previousValue + 1);
+  }
+
   return (
     <main className="flex min-h-screen bg-gray-100 text-slate-900">
       <TeamSidebar />
@@ -65,7 +70,7 @@ export default function Home() {
           <p>Notification</p>
         </div>
 
-        <TeamInviteForm />
+        <TeamInviteForm onInviteSent={handleInviteSent} />
 
         <div className="bg-white p-6 rounded-xl">
           <h2 className="text-2xl font-semibold mb-6">
@@ -74,7 +79,6 @@ export default function Home() {
 
           <div className="mb-4 px-2">
             <div className="grid grid-cols-[40px_1fr_120px_100px] text-sm text-gray-400 font-medium">
-
               <div>
                 <input type="checkbox" />
               </div>
@@ -101,7 +105,7 @@ export default function Home() {
           </div>
         </div>
 
-        <NotificationsList />
+        <NotificationsList refreshTrigger={refreshNotifications} />
       </section>
     </main>
   );

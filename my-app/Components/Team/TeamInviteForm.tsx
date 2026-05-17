@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 
-export default function TeamInviteForm() {
+type TeamInviteFormProps = {
+  onInviteSent: (email: string) => void;
+};
+
+export default function TeamInviteForm({
+  onInviteSent,
+}: TeamInviteFormProps) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -36,6 +42,7 @@ export default function TeamInviteForm() {
 
       if (response.ok) {
         setMessage(`Invitation sent to ${email}`);
+        onInviteSent(email);
         setEmail("");
       } else {
         setMessage("Failed to send invitation");
