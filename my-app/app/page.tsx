@@ -49,6 +49,13 @@ export default function Home() {
     setRefreshNotifications((previousValue) => previousValue + 1);
   }
 
+  function handleTeamMemberAdded(newMember: TeamMember) {
+    setTeamMembers((previousMembers) => [
+      ...previousMembers,
+      newMember,
+    ]);
+  }
+
   return (
     <main className="flex min-h-screen bg-gray-100 text-slate-900">
       <TeamSidebar />
@@ -70,7 +77,10 @@ export default function Home() {
           <p>Notification</p>
         </div>
 
-        <TeamInviteForm onInviteSent={handleInviteSent} />
+        <TeamInviteForm
+          onInviteSent={handleInviteSent}
+          onTeamMemberAdded={handleTeamMemberAdded}
+        />
 
         <div className="bg-white p-6 rounded-xl">
           <h2 className="text-2xl font-semibold mb-6">

@@ -17,7 +17,6 @@ type NotificationsListProps = {
 export default function NotificationsList({
   refreshTrigger,
 }: NotificationsListProps) {
-
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
@@ -29,6 +28,29 @@ export default function NotificationsList({
       );
   }, [refreshTrigger]);
 
+  async function handleMarkAsRead(id: number) {
+    try {
+      const response = await fetch(
+        `http://localhost:5098/api/Notifications/${id}/read`,
+        {
+          method: "PUT",
+        }
+      );
+
+      if (response.ok) {
+        setNotifications((previousNotifications) =>
+          previousNotifications.map((notification) =>
+            notification.id === id
+              ? { ...notification, isRead: true }
+              : notification
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
+  }
+
   return (
     <div className="bg-white p-6 rounded-xl mt-8">
       <h2 className="text-2xl font-semibold mb-6">
@@ -39,8 +61,11 @@ export default function NotificationsList({
         {notifications.map((notification) => (
           <NotificationCard
             key={notification.id}
+            id={notification.id}
             title={notification.title}
             message={notification.message}
+            isRead={notification.isRead}
+            onMarkAsRead={handleMarkAsRead}
           />
         ))}
       </div>

@@ -2,12 +2,21 @@
 
 import { useState } from "react";
 
+type TeamMember = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+};
+
 type TeamInviteFormProps = {
   onInviteSent: (email: string) => void;
+  onTeamMemberAdded: (member: TeamMember) => void;
 };
 
 export default function TeamInviteForm({
   onInviteSent,
+  onTeamMemberAdded,
 }: TeamInviteFormProps) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -28,7 +37,7 @@ export default function TeamInviteForm({
     setMessage("");
 
     try {
-      const response = await fetch("http://localhost:5273/api/Invitations", {
+      const invitationResponse = await fetch("http://localhost:5273/api/Invitations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,13 +49,35 @@ export default function TeamInviteForm({
         }),
       });
 
-      if (response.ok) {
-        setMessage(`Invitation sent to ${email}`);
-        onInviteSent(email);
-        setEmail("");
-      } else {
+      if (!invitationResponse.ok) {
         setMessage("Failed to send invitation");
+        return;
       }
+
+      const newMemberResponse = await fetch("http://localhost:5212/api/TeamMembers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: 0,
+          name: email.split("@")[0],
+          email: email,
+          role: "Student",
+        }),
+      });
+
+      if (!newMemberResponse.ok) {
+        setMessage("Invitation sent, but member was not added");
+        return;
+      }
+
+      const newMember = await newMemberResponse.json();
+
+      onTeamMemberAdded(newMember);
+      onInviteSent(email);
+      setMessage(`Invitation sent to ${email}`);
+      setEmail("");
     } catch (error) {
       console.error(error);
       setMessage("Something went wrong");
