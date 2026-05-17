@@ -27,6 +27,7 @@ export default function Home() {
   }, []);
 
   async function handleDelete(id: number) {
+    const memberToDelete = teamMembers.find((member) => member.id === id);
 
     const confirmed = confirm(
       "Are you sure you want to remove this member?"
@@ -48,6 +49,21 @@ export default function Home() {
         setTeamMembers((previousMembers) =>
           previousMembers.filter((member) => member.id !== id)
         );
+
+        await fetch("http://localhost:5098/api/Notifications", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: 0,
+            title: "Team member removed",
+            message: `${memberToDelete?.name ?? "A team member"} was removed from the team.`,
+            isRead: false,
+          }),
+        });
+
+        setRefreshNotifications((previousValue) => previousValue + 1);
       }
     } catch (error) {
       console.error("Error deleting member:", error);
@@ -111,7 +127,6 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-4">
-
             {teamMembers.length === 0 ? (
               <p className="text-gray-400 text-sm">
                 No team members found
@@ -128,7 +143,6 @@ export default function Home() {
                 />
               ))
             )}
-
           </div>
         </div>
 
