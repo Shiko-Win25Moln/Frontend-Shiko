@@ -27,6 +27,15 @@ export default function Home() {
   }, []);
 
   async function handleDelete(id: number) {
+
+    const confirmed = confirm(
+      "Are you sure you want to remove this member?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
     try {
       const response = await fetch(
         `http://localhost:5212/api/TeamMembers/${id}`,
@@ -102,16 +111,24 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-4">
-            {teamMembers.map((member) => (
-              <TeamMemberCard
-                key={member.id}
-                id={member.id}
-                name={member.name}
-                email={member.email}
-                role={member.role}
-                onDelete={handleDelete}
-              />
-            ))}
+
+            {teamMembers.length === 0 ? (
+              <p className="text-gray-400 text-sm">
+                No team members found
+              </p>
+            ) : (
+              teamMembers.map((member) => (
+                <TeamMemberCard
+                  key={member.id}
+                  id={member.id}
+                  name={member.name}
+                  email={member.email}
+                  role={member.role}
+                  onDelete={handleDelete}
+                />
+              ))
+            )}
+
           </div>
         </div>
 
