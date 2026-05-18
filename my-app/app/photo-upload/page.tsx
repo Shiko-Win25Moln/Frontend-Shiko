@@ -1,5 +1,41 @@
 
+"use client";
+
+import { useState } from "react";
+
 export default function PhotoUploadPage() {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [message, setMessage] = useState("");
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      setMessage("Please choose a file first.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await fetch(
+        "https://localhost:7210/UploadPhoto",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        setMessage("Photo uploaded successfully!");
+      } else {
+        setMessage("Upload failed.");
+      }
+    } catch (error) {
+      setMessage("Something went wrong.");
+      console.error(error);
+    }
+  };
+
   return (
     <div className="p-10">
       <h1 className="text-3xl font-bold mb-8">
@@ -24,6 +60,11 @@ export default function PhotoUploadPage() {
             type="file"
             accept="image/*"
             className="block mx-auto"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                setSelectedFile(e.target.files[0]);
+              }
+            }}
           />
         </div>
 
@@ -32,10 +73,19 @@ export default function PhotoUploadPage() {
             Cancel
           </button>
 
-          <button className="btn">
+          <button
+            className="btn"
+            onClick={handleUpload}
+          >
             Upload
           </button>
         </div>
+
+        {message && (
+          <p className="mt-4 font-semibold">
+            {message}
+          </p>
+        )}
       </div>
     </div>
   );
