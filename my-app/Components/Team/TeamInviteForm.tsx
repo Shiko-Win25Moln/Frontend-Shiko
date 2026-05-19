@@ -74,6 +74,19 @@ export default function TeamInviteForm({
 
       const newMember = await newMemberResponse.json();
 
+      await fetch("http://localhost:5098/api/Notifications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: 0,
+          title: "Invitation sent",
+          message: `Invitation sent to ${email}.`,
+          isRead: false,
+        }),
+      });
+
       onTeamMemberAdded(newMember);
       onInviteSent(email);
       setMessage(`Invitation sent to ${email}`);

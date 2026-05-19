@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import * as signalR from "@microsoft/signalr";
 import NotificationCard from "./NotificationCard";
 
 type Notification = {
@@ -27,6 +28,31 @@ export default function NotificationsList({
         console.error("Error fetching notifications:", error)
       );
   }, [refreshTrigger]);
+
+  useEffect(() => {
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:5098/notificationHub")
+      .withAutomaticReconnect()
+      .build();
+
+    connection
+      .start()
+      .then(() => console.log("Connected to SignalR notification hub"))
+      .catch((error) =>
+        console.error("SignalR connection error:", error)
+      );
+
+    connection.on("ReceiveNotification", (newNotification: Notification) => {
+      setNotifications((previousNotifications) => [
+        newNotification,
+        ...previousNotifications,
+      ]);
+    });
+
+    return () => {
+      connection.stop();
+    };
+  }, []);
 
   async function handleMarkAsRead(id: number) {
     try {
