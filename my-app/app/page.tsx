@@ -17,6 +17,8 @@ export default function Home() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [refreshNotifications, setRefreshNotifications] = useState(0);
 
+  const [activeTab, setActiveTab] = useState("team");
+
   useEffect(() => {
     fetch("http://localhost:5212/api/TeamMembers")
       .then((response) => response.json())
@@ -27,7 +29,9 @@ export default function Home() {
   }, []);
 
   async function handleDelete(id: number) {
-    const memberToDelete = teamMembers.find((member) => member.id === id);
+    const memberToDelete = teamMembers.find(
+      (member) => member.id === id
+    );
 
     const confirmed = confirm(
       "Are you sure you want to remove this member?"
@@ -47,23 +51,32 @@ export default function Home() {
 
       if (response.ok) {
         setTeamMembers((previousMembers) =>
-          previousMembers.filter((member) => member.id !== id)
+          previousMembers.filter(
+            (member) => member.id !== id
+          )
         );
 
-        await fetch("http://localhost:5098/api/Notifications", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: 0,
-            title: "Team member removed",
-            message: `${memberToDelete?.name ?? "A team member"} was removed from the team.`,
-            isRead: false,
-          }),
-        });
+        await fetch(
+          "http://localhost:5098/api/Notifications",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: 0,
+              title: "Team member removed",
+              message: `${
+                memberToDelete?.name ?? "A team member"
+              } was removed from the team.`,
+              isRead: false,
+            }),
+          }
+        );
 
-        setRefreshNotifications((previousValue) => previousValue + 1);
+        setRefreshNotifications(
+          (previousValue) => previousValue + 1
+        );
       }
     } catch (error) {
       console.error("Error deleting member:", error);
@@ -71,7 +84,9 @@ export default function Home() {
   }
 
   function handleInviteSent() {
-    setRefreshNotifications((previousValue) => previousValue + 1);
+    setRefreshNotifications(
+      (previousValue) => previousValue + 1
+    );
   }
 
   function handleTeamMemberAdded(newMember: TeamMember) {
@@ -91,62 +106,90 @@ export default function Home() {
         </h1>
 
         <div className="flex gap-8 mb-8 text-sm text-gray-500">
-          <p>General</p>
+          <button>
+            General
+          </button>
 
-          <p className="bg-slate-800 text-white px-5 py-2 rounded-lg">
+          <button
+            onClick={() => setActiveTab("team")}
+            className={
+              activeTab === "team"
+                ? "bg-slate-800 text-white px-5 py-2 rounded-lg"
+                : ""
+            }
+          >
             Team
-          </p>
+          </button>
 
-          <p>Password</p>
+          <button>
+            Password
+          </button>
 
-          <p>Notification</p>
+          <button
+            onClick={() => setActiveTab("notifications")}
+            className={
+              activeTab === "notifications"
+                ? "bg-slate-800 text-white px-5 py-2 rounded-lg"
+                : ""
+            }
+          >
+            Notification
+          </button>
         </div>
 
-        <TeamInviteForm
-          onInviteSent={handleInviteSent}
-          onTeamMemberAdded={handleTeamMemberAdded}
-        />
+        {activeTab === "team" && (
+          <>
+            <TeamInviteForm
+              onInviteSent={handleInviteSent}
+              onTeamMemberAdded={handleTeamMemberAdded}
+            />
 
-        <div className="bg-white p-6 rounded-xl">
-          <h2 className="text-2xl font-semibold mb-6">
-            Team members
-          </h2>
+            <div className="bg-white p-6 rounded-xl">
+              <h2 className="text-2xl font-semibold mb-6">
+                Team members
+              </h2>
 
-          <div className="mb-4 px-2">
-            <div className="grid grid-cols-[40px_1fr_120px_100px] text-sm text-gray-400 font-medium">
-              <div>
-                <input type="checkbox" />
+              <div className="mb-4 px-2">
+                <div className="grid grid-cols-[40px_1fr_120px_100px] text-sm text-gray-400 font-medium">
+                  <div>
+                    <input type="checkbox" />
+                  </div>
+
+                  <p>Name</p>
+
+                  <p>Role</p>
+
+                  <div></div>
+                </div>
               </div>
 
-              <p>Name</p>
-
-              <p>Role</p>
-
-              <div></div>
+              <div className="flex flex-col gap-4">
+                {teamMembers.length === 0 ? (
+                  <p className="text-gray-400 text-sm">
+                    No team members found
+                  </p>
+                ) : (
+                  teamMembers.map((member) => (
+                    <TeamMemberCard
+                      key={member.id}
+                      id={member.id}
+                      name={member.name}
+                      email={member.email}
+                      role={member.role}
+                      onDelete={handleDelete}
+                    />
+                  ))
+                )}
+              </div>
             </div>
-          </div>
+          </>
+        )}
 
-          <div className="flex flex-col gap-4">
-            {teamMembers.length === 0 ? (
-              <p className="text-gray-400 text-sm">
-                No team members found
-              </p>
-            ) : (
-              teamMembers.map((member) => (
-                <TeamMemberCard
-                  key={member.id}
-                  id={member.id}
-                  name={member.name}
-                  email={member.email}
-                  role={member.role}
-                  onDelete={handleDelete}
-                />
-              ))
-            )}
-          </div>
-        </div>
-
-        <NotificationsList refreshTrigger={refreshNotifications} />
+        {activeTab === "notifications" && (
+          <NotificationsList
+            refreshTrigger={refreshNotifications}
+          />
+        )}
       </section>
     </main>
   );
