@@ -1,7 +1,9 @@
 import Image from "next/image"
+import Link from "next/link";
 import CourseAuthor from "./CourseAuthor";
 
 type CourseCardProps = {
+    id: number;
     title: string;
     imageUrl: string;
     authorName: string;
@@ -9,7 +11,7 @@ type CourseCardProps = {
 
 }
 
-const CourseCard = ({ title, imageUrl, authorName, authorImage }: CourseCardProps) => {
+const CourseCard = ({ id, title, imageUrl, authorName, authorImage }: CourseCardProps) => {
   return (
     <article className="rounded-3xl bg-white p-3 shadow-sm">
       <Image
@@ -31,7 +33,14 @@ const CourseCard = ({ title, imageUrl, authorName, authorImage }: CourseCardProp
             authorImage={authorImage}
           />
         </div>
+        <Link
+          href={`/courses/${id}`}
+          className="btn"
+        >
+          View details
+        </Link>
       </div>
+      
     </article>
   )
 }
