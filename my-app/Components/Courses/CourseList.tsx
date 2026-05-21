@@ -1,42 +1,74 @@
 import CourseCard from "./CourseCard";
 
 
-const courses = [
-  {
-    id: 1,
-    title: "Artificial Intelligence",
-    imageUrl: "/images/course-ai.jpg",
-    authorName: "Samantha William",
-    authorImage: "/images/author-samantha.jpg",
-  },
-  {
-    id: 2,
-    title: "Data Science & Analytics",
-    imageUrl: "/images/course-data-science.jpg",
-    authorName: "Karen Hope",
-    authorImage: "/images/author-karen.jpg",
-  },
-  {
-    id: 3,
-    title: "Digital Marketing",
-    imageUrl: "/images/course-digital-marketing.jpg",
-    authorName: "Jack Sally",
-    authorImage: "/images/author-jack.jpg",
-  },
-];
+type Course = {
+    id: number;
+    title: string;
+    imageUrl: string;
+    courseAuthorId: number;
+};
 
-const CourseList = () => {
+type CourseAuthor = {
+    id: number;
+    authorName: string;
+    authorImage: string;
+};
+
+async function getCourses(): Promise<Course[]> {
+  const response = await fetch(
+    "https://shiko-webapp.azurewebsites.net/api/courses",
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch courses. Status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+async function getAuthors(): Promise<CourseAuthor[]> {
+  const response = await fetch(
+    "https://shiko-courseauthor-webapp.azurewebsites.net/api/course-authors",
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch authors. Status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+const CourseList = async () => {
+    const courses = await getCourses();
+    const authors = await getAuthors();
   return (
     <section className="grid grid-cols-1 gap-7 md:grid-cols-2 xl:grid-cols-3">
-      {courses.map((course) => (
-        <CourseCard
-          key={course.id}
-          title={course.title}
-          imageUrl={course.imageUrl}
-          authorName={course.authorName}
-          authorImage={course.authorImage}
-        />
-      ))}
+      {courses.map((course) => {
+        const author = authors.find(
+          (author) => author.id === course.courseAuthorId
+        );
+
+        if (!author) {
+          throw new Error(`Author with id ${course.courseAuthorId} was not found`);
+        }
+
+        return (
+          <CourseCard
+            key={course.id}
+            id={course.id}
+            title={course.title}
+            imageUrl={course.imageUrl}
+            authorName={author.authorName}
+            authorImage={author.authorImage}
+          />
+        );
+      })}
     </section>
   )
 }
