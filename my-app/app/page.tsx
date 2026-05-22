@@ -97,6 +97,7 @@ export default function Home() {
   }
 
   return (
+<<<<<<< HEAD
     <main className="flex min-h-screen bg-gray-100 text-slate-900">
       <TeamSidebar />
 
@@ -191,6 +192,10 @@ export default function Home() {
           />
         )}
       </section>
+=======
+    <main>
+      <h1>LMS Frontend</h1>
+>>>>>>> Julia
     </main>
   );
 }
