@@ -20,7 +20,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("team");
 
   useEffect(() => {
-    fetch("http://localhost:5212/api/TeamMembers")
+    fetch("https://teammemberswebapi20260524090131-etfebsb9dpgwephm.swedencentral-01.azurewebsites.net/api/TeamMembers")
       .then((response) => response.json())
       .then((data) => setTeamMembers(data))
       .catch((error) =>
@@ -43,7 +43,7 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        `http://localhost:5212/api/TeamMembers/${id}`,
+        `https://teammemberswebapi20260524090131-etfebsb9dpgwephm.swedencentral-01.azurewebsites.net/api/TeamMembers/${id}`,
         {
           method: "DELETE",
         }
@@ -57,7 +57,7 @@ export default function Home() {
         );
 
         await fetch(
-          "http://localhost:5098/api/Notifications",
+          "https://notificationswebapi20260524114831-hsgeh6g3g9f0hccj.swedencentral-01.azurewebsites.net/api/Notifications",
           {
             method: "POST",
             headers: {
