@@ -13,16 +13,51 @@ type TeamMember = {
   role: string;
 };
 
-export default function Home() {
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [refreshNotifications, setRefreshNotifications] = useState(0);
+const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
+  {
+    id: -1,
+    name: "Samantha William",
+    email: "samantha@gmail.com",
+    role: "Student",
+  },
+  {
+    id: -2,
+    name: "Adam Smith",
+    email: "adamsmith@gmail.com",
+    role: "Student",
+  },
+  {
+    id: -3,
+    name: "Deven Lane",
+    email: "info@devenslane.com",
+    role: "Student",
+  },
+  {
+    id: -4,
+    name: "Annette Black",
+    email: "account@annette.com",
+    role: "Student",
+  },
+];
 
+export default function Home() {
+  const [teamMembers, setTeamMembers] =
+    useState<TeamMember[]>(DEFAULT_TEAM_MEMBERS);
+
+  const [refreshNotifications, setRefreshNotifications] = useState(0);
   const [activeTab, setActiveTab] = useState("team");
 
   useEffect(() => {
-    fetch("https://teammemberswebapi20260524090131-etfebsb9dpgwephm.swedencentral-01.azurewebsites.net/api/TeamMembers")
+    fetch(
+      "https://teammemberswebapi20260524090131-etfebsb9dpgwephm.swedencentral-01.azurewebsites.net/api/TeamMembers"
+    )
       .then((response) => response.json())
-      .then((data) => setTeamMembers(data))
+      .then((data) =>
+        setTeamMembers([
+          ...DEFAULT_TEAM_MEMBERS,
+          ...data,
+        ])
+      )
       .catch((error) =>
         console.error("Error fetching team members:", error)
       );
@@ -38,6 +73,36 @@ export default function Home() {
     );
 
     if (!confirmed) {
+      return;
+    }
+
+    if (id < 0) {
+      setTeamMembers((previousMembers) =>
+        previousMembers.filter((member) => member.id !== id)
+      );
+
+      await fetch(
+        "https://notificationswebapi20260524114831-hsgeh6g3g9f0hccj.swedencentral-01.azurewebsites.net/api/Notifications",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: 0,
+            title: "Team member removed",
+            message: `${
+              memberToDelete?.name ?? "A team member"
+            } was removed from the team.`,
+            isRead: false,
+          }),
+        }
+      );
+
+      setRefreshNotifications(
+        (previousValue) => previousValue + 1
+      );
+
       return;
     }
 
