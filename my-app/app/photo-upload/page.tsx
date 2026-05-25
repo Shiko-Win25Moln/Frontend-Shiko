@@ -17,19 +17,39 @@ export default function PhotoUploadPage() {
     formData.append("file", selectedFile);
 
     try {
-      const response = await fetch("https://localhost:7210/UploadPhoto", {
-        method: "POST",
-        headers: {
-          "X-API-KEY": "PhotoUploadSecretKey2026",
-        },
-        body: formData,
-      });
+      // Upload photo
+      const response = await fetch(
+        "https://localhost:7210/UploadPhoto",
+        {
+          method: "POST",
+          headers: {
+            "X-API-KEY": "PhotoUploadSecretKey2026",
+          },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
 
         setUploadedImageUrl(data.url);
         setMessage("Photo uploaded successfully!");
+
+        // Create achievement automatically
+        await fetch(
+          "https://localhost:7286/AddAchievement",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: "user-1",
+              title: "Profile Photo Uploaded",
+              description: "User uploaded their first profile photo",
+            }),
+          }
+        );
       } else {
         setMessage("Upload failed.");
       }
@@ -76,7 +96,10 @@ export default function PhotoUploadPage() {
             Cancel
           </button>
 
-          <button className="btn" onClick={handleUpload}>
+          <button
+            className="btn"
+            onClick={handleUpload}
+          >
             Upload
           </button>
         </div>
@@ -89,7 +112,9 @@ export default function PhotoUploadPage() {
 
         {uploadedImageUrl && (
           <div className="mt-6">
-            <p className="font-semibold mb-2">Uploaded image:</p>
+            <p className="font-semibold mb-2">
+              Uploaded image:
+            </p>
 
             <img
               src={uploadedImageUrl}
