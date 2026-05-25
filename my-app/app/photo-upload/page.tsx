@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -6,6 +5,7 @@ import { useState } from "react";
 export default function PhotoUploadPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [message, setMessage] = useState("");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
 
   const handleUpload = async () => {
     if (!selectedFile) {
@@ -17,15 +17,18 @@ export default function PhotoUploadPage() {
     formData.append("file", selectedFile);
 
     try {
-      const response = await fetch(
-        "https://localhost:7210/UploadPhoto",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch("https://localhost:7210/UploadPhoto", {
+        method: "POST",
+        headers: {
+          "X-API-KEY": "PhotoUploadSecretKey2026",
+        },
+        body: formData,
+      });
 
       if (response.ok) {
+        const data = await response.json();
+
+        setUploadedImageUrl(data.url);
         setMessage("Photo uploaded successfully!");
       } else {
         setMessage("Upload failed.");
@@ -73,10 +76,7 @@ export default function PhotoUploadPage() {
             Cancel
           </button>
 
-          <button
-            className="btn"
-            onClick={handleUpload}
-          >
+          <button className="btn" onClick={handleUpload}>
             Upload
           </button>
         </div>
@@ -85,6 +85,18 @@ export default function PhotoUploadPage() {
           <p className="mt-4 font-semibold">
             {message}
           </p>
+        )}
+
+        {uploadedImageUrl && (
+          <div className="mt-6">
+            <p className="font-semibold mb-2">Uploaded image:</p>
+
+            <img
+              src={uploadedImageUrl}
+              alt="Uploaded profile"
+              className="w-32 h-32 rounded-full object-cover border"
+            />
+          </div>
         )}
       </div>
     </div>
