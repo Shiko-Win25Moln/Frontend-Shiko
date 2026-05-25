@@ -8,13 +8,13 @@ type Achievement = {
   title: string;
 };
 
-const achievementImages = [
-  "/images/achievements/A1.svg",
-  "/images/achievements/A2.svg",
-  "/images/achievements/A3.svg",
-  "/images/achievements/A4.svg",
-  "/images/achievements/A5.svg",
-];
+const achievementImages: Record<string, string> = {
+  "First Login": "/images/achievements/A1.svg",
+  "First Course": "/images/achievements/A2.svg",
+  "Profile Photo Uploaded": "/images/achievements/A3.svg",
+  "Completed 5 Courses": "/images/achievements/A4.svg",
+  "Top Student": "/images/achievements/A5.svg",
+};
 
 export default function AchievementsPage() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
@@ -53,12 +53,8 @@ export default function AchievementsPage() {
               className="flex h-14 w-14 items-center justify-center rounded-full bg-[#FFF4ED] shadow-sm"
               title={achievement.title}
             >
-              <Image
-                src={
-                  achievementImages[
-                    index % achievementImages.length
-                  ]
-                }
+             <Image src={ achievementImages[achievement.title] || "/images/achievements/A1.svg"
+  }
                 alt="Achievement badge"
                 width={28}
                 height={28}
