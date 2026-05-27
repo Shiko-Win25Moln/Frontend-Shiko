@@ -30,7 +30,7 @@ const courseList = [
 
 const PopularCourses = () => {
   return (
-    <section className=''>
+    <section className='grid grid-cols-1 gap-7 md:grid-cols-2 xl:grid-cols-4'>
       {courseList.map((courseList) => (
         <PopularCourseCard
           key={courseList.id}
