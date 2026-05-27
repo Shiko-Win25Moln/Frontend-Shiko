@@ -5,7 +5,7 @@ type PopularCourseCardProps = {
     title: string,
     description: string,
 }
-
+ 
 const PopularCourseCard = ({ image, title, description }: PopularCourseCardProps) => {
   return (
      <article>
