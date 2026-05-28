@@ -106,7 +106,7 @@ export default async function CourseDetailsPage({
                             alt={course.title}
                             width={900}
                             height={460}
-                            className="h-[300px] w-full object-cover"
+                            className="h-75 w-full object-cover"
                             />
                         </div>
 
