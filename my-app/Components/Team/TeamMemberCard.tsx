@@ -26,11 +26,11 @@ export default function TeamMemberCard({
     }
 
     if (name.includes("Deven")) {
-      return "/images/authors/johnny.svg";
+      return "/images/authors/Deven.svg";
     }
 
     if (name.includes("Annette")) {
-      return "/images/authors/hasan.svg";
+      return "/images/authors/Annette.svg";
     }
 
     return "/images/authors/jasmin.svg";
@@ -45,9 +45,9 @@ export default function TeamMemberCard({
         <Image
           src={getAvatar()}
           alt={name}
-          width={44}
-          height={44}
-          className="rounded-full"
+          width={50}
+          height={50}
+          className="rounded-full object-cover"
         />
 
         <div>
