@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shiko LMS
 
-## Getting Started
+Shiko är ett Learning Management System utvecklat som grupprojekt under kursen Molntjänster.
 
-First, run the development server:
+Projektet bygger på en Figma-design och använder moderna tekniker inom frontend, backend och molntjänster.
+
+---
+
+# Tekniker
+
+## Frontend
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+
+## Backend
+- ASP.NET Core Web API
+- Entity Framework Core
+- SQL Server
+
+## Molntjänster
+- Microsoft Azure
+- Azure App Service
+- Azure SQL Database
+- Azure Static Web App
+
+---
+
+# Funktioner
+
+## Team Management
+- Bjuda in teammedlemmar
+- Visa teammedlemmar
+- Ta bort teammedlemmar
+- Notifications i realtid med SignalR
+- Markera notifikationer som lästa
+
+---
+
+# Mina moduler
+
+Utvecklat av Helen:
+
+- TeamMembers API
+- Invitations API
+- Notifications API
+- Frontend för Team-sidan
+- Azure deployment för backend APIs
+
+---
+
+# Installation
+
+## Frontend
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Backend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Starta respektive API via Visual Studio.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+# GitHub
 
-To learn more about Next.js, take a look at the following resources:
+Projektet använder GitHub med branch-struktur:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- main
+- dev
+- feature branches
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+# Azure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Backend APIs är deployade till Microsoft Azure.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Frontend deployas via Azure Static Web Apps.
+
+---
+
+# Grupparbete
+
+Projektet utvecklas agilt i grupp med:
+- GitHub
+- Jira
+- Microsoft Teams
+
+---
+
+# AI som stöd
+
+AI har använts som bollplank för felsökning, strukturering och förståelse under utvecklingen. All kod har granskats, anpassats och implementerats av utvecklarna.
