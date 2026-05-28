@@ -15,13 +15,16 @@ type NotificationsListProps = {
   refreshTrigger: number;
 };
 
+const API_URL =
+  "https://notificationswebapi20260524114831-hsgeh6g3g9f0hccj.swedencentral-01.azurewebsites.net";
+
 export default function NotificationsList({
   refreshTrigger,
 }: NotificationsListProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:5098/api/Notifications")
+    fetch(`${API_URL}/api/Notifications`)
       .then((response) => response.json())
       .then((data) => setNotifications(data))
       .catch((error) =>
@@ -31,7 +34,7 @@ export default function NotificationsList({
 
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5098/notificationHub")
+      .withUrl(`${API_URL}/notificationHub`)
       .withAutomaticReconnect()
       .build();
 
@@ -57,7 +60,7 @@ export default function NotificationsList({
   async function handleMarkAsRead(id: number) {
     try {
       const response = await fetch(
-        `http://localhost:5098/api/Notifications/${id}/read`,
+        `${API_URL}/api/Notifications/${id}/read`,
         {
           method: "PUT",
         }
@@ -79,9 +82,7 @@ export default function NotificationsList({
 
   return (
     <div className="bg-white p-6 rounded-xl mt-8">
-      <h2 className="text-2xl font-semibold mb-6">
-        Notifications
-      </h2>
+      <h2 className="text-2xl font-semibold mb-6">Notifications</h2>
 
       <div className="flex flex-col gap-4">
         {notifications.map((notification) => (
