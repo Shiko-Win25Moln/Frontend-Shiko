@@ -1,45 +1,47 @@
+import Link from "next/link";
+
+
 export default function TeamSidebar() {
   return (
     <aside className="w-64 bg-white p-6 min-h-screen">
       <h1 className="text-3xl font-bold mb-10">Shiko</h1>
 
       <nav className="flex flex-col gap-3 text-sm">
-        <p className="px-3 py-2 rounded-lg hover:bg-gray-100">
+        <Link
+          href="/"
+          className="px-3 py-2 rounded-lg hover:bg-gray-100"
+        >
           Dashboard
-        </p>
-
-        <p className="px-3 py-2 rounded-lg hover:bg-gray-100">
+        </Link>
+    
+        <Link
+          href={`/courses`}
+          className="px-3 py-2 rounded-lg hover:bg-gray-100"
+        >
           Courses
-        </p>
-
-        <p className="px-3 py-2 rounded-lg hover:bg-gray-100">
-          Calendar
-        </p>
-
-        <p className="px-3 py-2 rounded-lg hover:bg-gray-100">
-          Live Class
-        </p>
+        </Link>
 
         <div className="mt-8 flex flex-col gap-3">
-          <p className="px-3 py-2 rounded-lg hover:bg-gray-100">
+          <Link
+            href={`/profile`}
+            className="px-3 py-2 rounded-lg hover:bg-gray-100"
+          >
             Profile
-          </p>
+          </Link>
 
-          <p className="px-3 py-2 rounded-lg bg-orange-50 text-orange-500 font-bold">
+          <Link
+            href={`/team`}
+            className="px-3 py-2 rounded-lg hover:bg-gray-100"
+          >
             Team
-          </p>
+          </Link>
 
-          <p className="px-3 py-2 rounded-lg hover:bg-gray-100">
-            Settings
-          </p>
-
-          <p className="px-3 py-2 rounded-lg hover:bg-gray-100">
-            Help Center
-          </p>
-
-          <p className="px-3 py-2 rounded-lg text-orange-500 font-semibold">
+          <Link
+            href={`/logout`}
+            className="px-3 py-2 rounded-lg hover:bg-gray-100"
+          >
             Log Out
-          </p>
+          </Link>
         </div>
       </nav>
     </aside>
