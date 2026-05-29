@@ -80,7 +80,7 @@ export default function ProfilePage() {
   Profile information
 </p>
 
-<AchievementBadges profileId={profile?.id} />          
+<AchievementBadges />
 </aside>
 
           <section className="rounded-2xl bg-white p-8 shadow-sm">
