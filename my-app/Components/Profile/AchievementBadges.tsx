@@ -48,12 +48,12 @@ export default function AchievementBadges() {
   }, []);
 
   return (
-    <section className="max-w-sm">
+    <section>
       <h2 className="mb-4 text-xl font-semibold">
         Achievements
       </h2>
 
-      <div className="flex gap-4 flex-wrap">
+      <div className="flex flex-wrap gap-4">
         {achievements.map((achievement) => (
           <div
             key={achievement.id}
