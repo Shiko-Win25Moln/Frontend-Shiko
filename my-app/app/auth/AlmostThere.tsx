@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Button from '../../components/Button';
+// import Button from '../../components/Button';
 
 interface AlmostThereProps {
   email: string;
@@ -104,9 +104,9 @@ const AlmostThere = ({ email }: AlmostThereProps) => {
               />
             </div>
             
-            <Button onClick={handleComplete} className="mt-6 w-full">
+            {/* <Button onClick={handleComplete} className="mt-6 w-full">
               Complete Registration
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
