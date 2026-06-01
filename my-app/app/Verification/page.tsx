@@ -58,7 +58,7 @@ function Page() {
       );
 
       if (response.ok) {
-        router.push("http://localhost:3000/");
+        router.push("/almost-there");
         return;
       }
 
