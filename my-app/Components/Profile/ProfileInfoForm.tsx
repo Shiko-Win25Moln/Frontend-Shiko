@@ -13,6 +13,7 @@ type Profile = {
   lastName: string;
   phoneNumber: string;
   description: string;
+  photoUrl: string;
 };
 
 export default function ProfileInfoForm() {
@@ -23,6 +24,7 @@ export default function ProfileInfoForm() {
     lastName: "",
     phoneNumber: "",
     description: "",
+    photoUrl: "",
   });
 
   const [message, setMessage] = useState("");
