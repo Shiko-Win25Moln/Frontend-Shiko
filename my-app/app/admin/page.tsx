@@ -1,4 +1,4 @@
-
+import AdminCreatePanel from "@/Components/Admin/AdminCreatePanel";
 
 const page = () => {
   return (
@@ -16,7 +16,7 @@ const page = () => {
           Create courses, course authors, FAQs, skills and achievements.
         </p>
 
-        
+        <AdminCreatePanel />
       </div>
     </main>
   )
