@@ -37,6 +37,13 @@ export default function TeamSidebar() {
           </Link>
 
           <Link
+            href={`/admin`}
+            className="px-3 py-2 rounded-lg hover:bg-gray-100"
+          >
+            Admin
+          </Link>
+
+          <Link
             href={`/logout`}
             className="px-3 py-2 rounded-lg hover:bg-gray-100"
           >
