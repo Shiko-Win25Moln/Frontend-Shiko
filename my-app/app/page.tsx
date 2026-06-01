@@ -33,7 +33,7 @@ const page = () => {
                 </p>
 
                 <Link
-                  href="/sign-up"
+                  href="/auth/sign-in"
                   className="btn mt-6"
                 >
                   Sign Up
@@ -52,7 +52,7 @@ const page = () => {
                 </p>
 
                 <Link
-                  href="/sign-in"
+                  href="/auth/login"
                   className="btn mt-6"
                 >
                   Sign In

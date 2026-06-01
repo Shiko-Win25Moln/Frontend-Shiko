@@ -58,7 +58,7 @@ function Page() {
       );
 
       if (response.ok) {
-        router.push("/almost-there");
+        router.push("/auth/almost-there");
         return;
       }
 
