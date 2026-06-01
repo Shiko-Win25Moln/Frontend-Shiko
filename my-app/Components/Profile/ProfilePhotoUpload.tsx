@@ -178,7 +178,7 @@ export default function ProfilePhotoUpload() {
             htmlFor="profile-photo-upload"
             className="inline-block cursor-pointer rounded-md border px-4 py-2 text-sm font-medium"
           >
-            Upload photo
+            Choose photo
           </label>
 
           {selectedFile && (
