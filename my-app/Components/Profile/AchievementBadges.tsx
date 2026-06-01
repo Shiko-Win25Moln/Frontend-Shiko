@@ -5,8 +5,12 @@ import { useEffect, useState } from "react";
 
 type Achievement = {
   id: number;
-  title: string;
+  profileId: number;
+  name: string;
 };
+
+const ACHIEVEMENTS_API_URL = "https://achievements-webapp.azurewebsites.net";
+const PROFILE_ID = 1;
 
 const achievementImages: Record<string, string> = {
   "First Login": "/images/achievements/A1.svg",
@@ -24,7 +28,12 @@ export default function AchievementBadges() {
     const fetchAchievements = async () => {
       try {
         const response = await fetch(
-"https://localhost:7286/users/test-achievement-user/achievements"        );
+          `${ACHIEVEMENTS_API_URL}/profiles/${PROFILE_ID}/achievements`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch achievements.");
+        }
 
         const data = await response.json();
 
@@ -39,24 +48,24 @@ export default function AchievementBadges() {
   }, []);
 
   return (
-    <section className="max-w-sm">
+    <section>
       <h2 className="mb-4 text-xl font-semibold">
         Achievements
       </h2>
 
-      <div className="flex gap-4 flex-wrap">
+      <div className="flex flex-wrap gap-4">
         {achievements.map((achievement) => (
           <div
             key={achievement.id}
             className="flex h-14 w-14 items-center justify-center rounded-full bg-[#FFF4ED] shadow-sm"
-            title={achievement.title}
+            title={achievement.name}
           >
             <Image
               src={
-                achievementImages[achievement.title] ||
+                achievementImages[achievement.name] ||
                 "/images/achievements/A1.svg"
               }
-              alt={achievement.title}
+              alt={achievement.name}
               width={28}
               height={28}
             />
