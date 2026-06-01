@@ -5,6 +5,7 @@ import Sidebar from "@/Components/Team/TeamSidebar";
 import ProfilePhotoUpload from "@/Components/Profile/ProfilePhotoUpload";
 import ProfileInfoForm from "@/Components/Profile/ProfileInfoForm";
 import AchievementBadges from "@/Components/Profile/AchievementBadges";
+import SkillsContainer from "@/Components/Profile/SkillsContainer";
 
 const PROFILE_API_URL = "https://profileinfo-webapp.azurewebsites.net";
 const TEST_USER_ID = "101c140c-df61-44a7-9ccd-48c24a25a670";
