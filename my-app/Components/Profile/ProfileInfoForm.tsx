@@ -157,9 +157,6 @@ export default function ProfileInfoForm() {
       </div>
 
       <div className="flex gap-4">
-        <button className="px-6 py-2 rounded-lg bg-gray-200 text-gray-500 font-semibold">
-          Cancel
-        </button>
 
         <button className="btn" onClick={handleSave}>
           Save

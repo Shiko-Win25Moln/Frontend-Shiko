@@ -183,11 +183,11 @@ export default function ProfilePhotoUpload() {
 
           {selectedFile && (
             <button
-              onClick={handleUpload}
-              className="ml-3 rounded-md bg-orange-500 px-4 py-2 text-sm font-medium text-white"
-            >
-              Save photo
-            </button>
+  onClick={handleUpload}
+  className="btn ml-3"
+>
+  Save photo
+</button>
           )}
         </div>
       </div>
