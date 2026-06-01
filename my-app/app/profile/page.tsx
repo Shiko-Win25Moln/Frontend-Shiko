@@ -1,5 +1,6 @@
 "use client";
 
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import Sidebar from "@/Components/Team/TeamSidebar";
 import ProfilePhotoUpload from "@/Components/Profile/ProfilePhotoUpload";
@@ -8,8 +9,12 @@ import AchievementBadges from "@/Components/Profile/AchievementBadges";
 import SkillsContainer from "@/Components/Profile/SkillsContainer";
 
 const PROFILE_API_URL = "https://profileinfo-webapp.azurewebsites.net";
-const TEST_USER_ID = "101c140c-df61-44a7-9ccd-48c24a25a670";
+const FALLBACK_USER_ID = "101c140c-df61-44a7-9ccd-48c24a25a670";
 const API_KEY = "ProfileInfoSecretKey2026";
+
+type JwtPayload = {
+  sub: string;
+};
 
 type Profile = {
   id: number;
@@ -20,12 +25,32 @@ type Profile = {
   description: string;
 };
 
+function getCurrentUserId() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return FALLBACK_USER_ID;
+  }
+
+  try {
+    const decoded = jwtDecode<JwtPayload>(token);
+    return decoded.sub;
+  } catch (error) {
+    console.error("Could not decode token", error);
+    return FALLBACK_USER_ID;
+  }
+}
+
 export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [userId, setUserId] = useState(FALLBACK_USER_ID);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        const currentUserId = getCurrentUserId();
+        setUserId(currentUserId);
+
         const response = await fetch(`${PROFILE_API_URL}/GetAllProfiles`, {
           headers: {
             "X-API-KEY": API_KEY,
@@ -39,7 +64,7 @@ export default function ProfilePage() {
         const data: Profile[] = await response.json();
 
         const currentUserProfile = data.find(
-          (profile) => profile.userId === TEST_USER_ID
+          (profile) => profile.userId === currentUserId
         );
 
         if (currentUserProfile) {
@@ -60,9 +85,9 @@ export default function ProfilePage() {
 
   return (
     <div className="flex min-h-screen bg-background">
-     <div className="shrink-0">
-  <Sidebar />
-</div>
+      <div className="shrink-0">
+        <Sidebar />
+      </div>
 
       <main className="flex-1 p-8 text-foreground">
         <h1 className="mb-6 text-3xl font-bold">Profile</h1>
@@ -73,20 +98,19 @@ export default function ProfilePage() {
               👤
             </div>
 
-            <h2 className="text-center font-semibold">
-              {fullName}
-            </h2>
+            <h2 className="text-center font-semibold">{fullName}</h2>
 
             <p className="mb-6 text-center text-xs text-orange-500">
-  Profile information
-</p>
-<SkillsContainer />
-<AchievementBadges />
-</aside>
+              Profile information
+            </p>
+
+            <SkillsContainer />
+            <AchievementBadges />
+          </aside>
 
           <section className="rounded-2xl bg-white p-8 shadow-sm">
             <ProfilePhotoUpload />
-            <ProfileInfoForm />
+            <ProfileInfoForm userId={userId} />
           </section>
         </div>
       </main>

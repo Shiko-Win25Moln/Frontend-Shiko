@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 
 const PROFILE_API_URL = "https://profileinfo-webapp.azurewebsites.net";
-const TEST_USER_ID = "101c140c-df61-44a7-9ccd-48c24a25a670";
 const API_KEY = "ProfileInfoSecretKey2026";
 
 type Profile = {
@@ -13,13 +12,17 @@ type Profile = {
   lastName: string;
   phoneNumber: string;
   description: string;
-  photoUrl: string;
+  photoUrl: string | null;
 };
 
-export default function ProfileInfoForm() {
+type ProfileInfoFormProps = {
+  userId: string;
+};
+
+export default function ProfileInfoForm({ userId }: ProfileInfoFormProps) {
   const [profile, setProfile] = useState<Profile>({
     id: 0,
-    userId: TEST_USER_ID,
+    userId: userId,
     firstName: "",
     lastName: "",
     phoneNumber: "",
@@ -45,11 +48,21 @@ export default function ProfileInfoForm() {
         const data: Profile[] = await response.json();
 
         const currentUserProfile = data.find(
-          (profile) => profile.userId === TEST_USER_ID
+          (profile) => profile.userId === userId
         );
 
         if (currentUserProfile) {
           setProfile(currentUserProfile);
+        } else {
+          setProfile({
+            id: 0,
+            userId: userId,
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+            description: "",
+            photoUrl: "",
+          });
         }
       } catch (error) {
         setMessage("Could not load profile.");
@@ -58,13 +71,13 @@ export default function ProfileInfoForm() {
     };
 
     fetchProfile();
-  }, []);
+  }, [userId]);
 
   const handleSave = async () => {
     try {
       const profileToSave = {
         ...profile,
-        userId: TEST_USER_ID,
+        userId: userId,
       };
 
       const url =
@@ -157,7 +170,6 @@ export default function ProfileInfoForm() {
       </div>
 
       <div className="flex gap-4">
-
         <button className="btn" onClick={handleSave}>
           Save
         </button>
