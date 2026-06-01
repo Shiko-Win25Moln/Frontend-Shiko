@@ -43,7 +43,7 @@ function PasswordForm() {
                     localStorage.setItem('token', data.accessToken);
                 }
 
-                window.location.href = '/dashboard';
+                window.location.href = '/';
             } else {
                 const errorData = await response.json().catch(() => ({}));
                 alert("Inloggningen misslyckades: " + (errorData.title || "Fel lösenord"));
