@@ -23,7 +23,7 @@ export default function Livechat() {
         try{
             await connection?.invoke("Typing", currentUserName.current, currentChatRoom.current)
         }
-        catch(error:any) {
+        catch(error:unknown) {
             console.error("Failed to notify typing", error);
         }
     }
@@ -32,7 +32,7 @@ export default function Livechat() {
         try{
             await connection?.invoke("StopTyping", currentUserName.current, currentChatRoom.current)
         }
-        catch(error:any) {
+        catch(error:unknown) {
             console.error("Failed to notify stop typing", error);
         }
     }
@@ -42,7 +42,7 @@ export default function Livechat() {
             await connection?.invoke("SendMessage", message);
             await connection?.invoke("StopTyping", currentUserName.current, currentChatRoom.current)
         }
-        catch(error:any) {
+        catch(error:unknown) {
             console.error("Failed to send message", error);
         }
     }
@@ -74,7 +74,7 @@ export default function Livechat() {
 
 
         }
-        catch(error:any) {
+        catch(error:unknown) {
             console.error("Failed to join chat room");
         }
     };
