@@ -80,7 +80,7 @@ export default function ProfilePage() {
             <p className="mb-6 text-center text-xs text-orange-500">
   Profile information
 </p>
-
+<SkillsContainer />
 <AchievementBadges />
 </aside>
 
