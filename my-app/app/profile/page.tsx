@@ -1,6 +1,7 @@
 import ProfilePhotoUpload from "@/Components/Profile/ProfilePhotoUpload";
 import ProfileInfoForm from "@/Components/Profile/ProfileInfoForm";
 import AchievementBadges from "@/Components/Profile/AchievementBadges";
+import SkillsContainer from "@/Components/Profile/SkillsContainer";
 
 export default function ProfilePage() {
   return (
@@ -27,6 +28,8 @@ export default function ProfilePage() {
           <p className="mb-6 text-center text-xs text-orange-500">
             Student
           </p>
+
+          <SkillsContainer/>
 
           <AchievementBadges />
         </aside>
