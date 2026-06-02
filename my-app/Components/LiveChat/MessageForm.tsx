@@ -38,15 +38,15 @@ const MessageForm = ({ sendMessage, typing, stopTyping }: MessageFormProps) => {
 
   return (
     <>
-        <form onSubmit={handleSubmit} className='sendmessage-form'>
-            <div className='container mx-auto py-3'>
+        <form onSubmit={handleSubmit} className='rounded-x1 border-form-border p-3'>
+            <div className='flex w-full items-center gap-3'>
                 <input
                     value={message}
                     onChange={handleInputChange}
-                    className='block w-full mb-3 px-4 py-2 border rounded-md'
-                    placeholder='Enter your message'
+                    placeholder='Message...'
+                    className='flex-1 bg-transparent text-dark-text outline-none'
                 />
-                <button type='submit' className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>
+                <button type='submit' className='rounded-lg bg-primary px-4 py-2 text-light-text'>
                     Send Message
                 </button>
             </div>

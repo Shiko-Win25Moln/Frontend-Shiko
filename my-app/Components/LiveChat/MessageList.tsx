@@ -19,12 +19,16 @@ const MessageList = ({ messages, currentUserName } : props) => {
 
   return (
     <>
-        <div className='message-list'>
+        <div className='h-full overflow-y-auto p-6'>
             {messages.map((item, index) => (
-                <div key={index} className={`chat-row ${item.userName === currentUserName.current ? 'right' : 'left'}`}>
-                    <div className='chat-bubble'>
-                        <div className='time'>{item.time}</div>
-                        <div className='message'>{item.message}</div>
+                <div
+                    key={index} 
+                    className={`mb-6 flex ${
+                        item.userName === currentUserName.current ? 'justify-end' : 'justify-start'}`}>
+
+                    <div className='max-w-[70%] rounded-2xl px-4 py-3 shadow-sm'>
+                        <p className='mb-1 text-xs text-slate-400'>{item.time}</p>
+                        <p className='text-secondary'>{item.message}</p>
                     </div>
                 </div>
             ))}
