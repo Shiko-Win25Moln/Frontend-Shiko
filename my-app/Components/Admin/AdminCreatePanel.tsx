@@ -40,10 +40,12 @@ export default function AdminCreatePanel() {
     }
 
     try {
-      const decoded = jwtDecode<JwtPayload>(token);
-      setIsAdmin(getRole(decoded) === "Admin");
+        const decoded = jwtDecode<JwtPayload>(token);
+        const role = getRole(decoded);
+
+        setIsAdmin(role === "Admin" || role === "Administrator");
     } catch {
-      setIsAdmin(false);
+    setIsAdmin(false);
     }
 
     setChecked(true);

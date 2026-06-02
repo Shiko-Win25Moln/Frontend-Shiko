@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
 
-  if (getRole(decoded) !== "Admin") {
+  if (getRole(decoded) !== "Administrator") {
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   }
 
