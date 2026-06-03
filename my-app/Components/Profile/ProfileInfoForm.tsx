@@ -2,21 +2,29 @@
 
 import { useEffect, useState } from "react";
 
+const PROFILE_API_URL = "https://profileinfo-webapp.azurewebsites.net";
+const TEST_USER_ID = "101c140c-df61-44a7-9ccd-48c24a25a670";
+const API_KEY = "ProfileInfoSecretKey2026";
+
 type Profile = {
   id: number;
+  userId: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
   description: string;
+  photoUrl: string;
 };
 
 export default function ProfileInfoForm() {
   const [profile, setProfile] = useState<Profile>({
     id: 0,
+    userId: TEST_USER_ID,
     firstName: "",
     lastName: "",
     phoneNumber: "",
     description: "",
+    photoUrl: "",
   });
 
   const [message, setMessage] = useState("");
@@ -24,27 +32,24 @@ export default function ProfileInfoForm() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-       const response = await fetch(
-  "https://localhost:7084/GetAllProfiles",
-  {
-    headers: {
-      "X-API-KEY": "ProfileInfoSecretKey2026",
-    },
-  }
-);
+        const response = await fetch(`${PROFILE_API_URL}/GetAllProfiles`, {
+          headers: {
+            "X-API-KEY": API_KEY,
+          },
+        });
 
-if (!response.ok) {
-  throw new Error("Failed to load profile");
-}
+        if (!response.ok) {
+          throw new Error("Failed to load profile");
+        }
 
-const data: Profile[] = await response.json();
+        const data: Profile[] = await response.json();
 
-if (data.length > 0) {
-  setProfile(data[0]);
-}
+        const currentUserProfile = data.find(
+          (profile) => profile.userId === TEST_USER_ID
+        );
 
-        if (data.length > 0) {
-          setProfile(data[0]);
+        if (currentUserProfile) {
+          setProfile(currentUserProfile);
         }
       } catch (error) {
         setMessage("Could not load profile.");
@@ -57,10 +62,15 @@ if (data.length > 0) {
 
   const handleSave = async () => {
     try {
+      const profileToSave = {
+        ...profile,
+        userId: TEST_USER_ID,
+      };
+
       const url =
         profile.id === 0
-          ? "https://localhost:7084/AddProfile"
-          : `https://localhost:7084/Profiles/${profile.id}`;
+          ? `${PROFILE_API_URL}/AddProfile`
+          : `${PROFILE_API_URL}/Profiles/${profile.id}`;
 
       const method = profile.id === 0 ? "POST" : "PUT";
 
@@ -68,13 +78,18 @@ if (data.length > 0) {
         method,
         headers: {
           "Content-Type": "application/json",
-          "X-API-KEY": "ProfileInfoSecretKey2026",
+          "X-API-KEY": API_KEY,
         },
-        body: JSON.stringify(profile),
+        body: JSON.stringify(profileToSave),
       });
 
       if (response.ok) {
         setMessage("Profile saved successfully!");
+
+        if (method === "POST") {
+          const createdProfile: Profile = await response.json();
+          setProfile(createdProfile);
+        }
       } else {
         setMessage("Could not save profile.");
       }
@@ -142,20 +157,13 @@ if (data.length > 0) {
       </div>
 
       <div className="flex gap-4">
-        <button className="px-6 py-2 rounded-lg bg-gray-200 text-gray-500 font-semibold">
-          Cancel
-        </button>
 
         <button className="btn" onClick={handleSave}>
           Save
         </button>
       </div>
 
-      {message && (
-        <p className="mt-4 font-semibold">
-          {message}
-        </p>
-      )}
+      {message && <p className="mt-4 font-semibold">{message}</p>}
     </div>
   );
 }

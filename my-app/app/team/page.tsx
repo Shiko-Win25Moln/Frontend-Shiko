@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import TeamMemberCard from "@/Components/Team/TeamMemberCard";
 import TeamInviteForm from "@/Components/Team/TeamInviteForm";
-import Sidebar from "@/Components/Layout/Sidebar";
+import TeamSidebar from "@/Components/Team/TeamSidebar";
 import NotificationsList from "@/Components/Team/NotificationsList";
 
 type TeamMember = {
@@ -101,7 +101,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen bg-gray-100 text-slate-900">
-      <Sidebar />
+      <TeamSidebar />
 
       <section className="flex-1 p-10">
         <h1 className="text-4xl font-bold mb-6">

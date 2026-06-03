@@ -35,7 +35,7 @@ const CourseCard = ({ id, title, imageUrl, authorName, authorImage }: CourseCard
         </div>
         <Link
           href={`/courses/${id}`}
-          className="btn"
+          className="btn mt-4"
         >
           View details
         </Link>
