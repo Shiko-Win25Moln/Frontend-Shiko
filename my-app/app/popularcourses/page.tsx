@@ -1,13 +1,13 @@
 import PopularCourses from "@/Components/PopularCourses/PopularCourses";
 
-const courses = () => {
+export default function page () {
     return (
-        <main>
-            <section>
-                <div className="mb-10">
-
+        <>
+            <main className="min-h-screen bg-body-background p-8">
+                <div className="mx-auto max-w-7x1">
+                    <PopularCourses />
                 </div>
-            </section>
-        </main>
+            </main>
+        </>
     )
 }

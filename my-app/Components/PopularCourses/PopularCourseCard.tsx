@@ -1,31 +1,30 @@
-import Image from "next/image";
+// import Image from "next/image";
 
 type PopularCourseCardProps = {
-    image: string,
+    // imageUrl: string,
     title: string,
     description: string,
 }
  
-const PopularCourseCard = ({ image, title, description }: PopularCourseCardProps) => {
+const PopularCourseCard = ({ title, description }: PopularCourseCardProps) => {
   return (
-     <article>
-      <Image
-        src={image}
-        alt={title}
-        width={60}
-        height={60}
-        className="h-48 w-full rounded-2xl object-cover"
-      />
+    <>
+      <article>
+        <div className="">
+          {/* <Image
+            src={imageUrl}
+            alt={title}
+            width={60}
+            height={60}
+            className="w-full h-48 object-cover rounded-lg"
+          /> */}
 
-      <div>
-        <h2 className="text-lg font-medium text-secondary">
-          {title}
-        </h2>
-        <h2>
-          {description}
-        </h2>
-      </div>
-     </article>
+          <h3 className="mt-4 text-x1 font-semibold">{title}</h3>
+
+          <p className="mt-2 text-dark-text">{description}</p>
+        </div>
+      </article>
+    </>
   )
 }
 
