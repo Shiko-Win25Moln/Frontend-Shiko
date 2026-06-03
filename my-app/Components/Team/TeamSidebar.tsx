@@ -1,7 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 
 export default function TeamSidebar() {
+
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/auth/sign-in");
+  };
   return (
     <aside className="w-64 bg-white p-6 min-h-screen">
       <h1 className="text-3xl font-bold mb-10">Shiko</h1>
@@ -43,12 +54,12 @@ export default function TeamSidebar() {
             Admin
           </Link>
 
-          <Link
-            href={`/logout`}
-            className="px-3 py-2 rounded-lg hover:bg-gray-100"
+          <button
+            onClick={handleLogout}
+            className="mt-8 text-left px-3 py-2 rounded-lg text-orange-500 hover:bg-orange-50"
           >
             Log Out
-          </Link>
+          </button>
         </div>
       </nav>
     </aside>
