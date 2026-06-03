@@ -14,9 +14,7 @@ type TeamMember = {
 };
 
 export default function Home() {
-  const [teamMembers, setTeamMembers] =
-    useState<TeamMember[]>([]);
-
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [refreshNotifications, setRefreshNotifications] = useState(0);
   const [activeTab, setActiveTab] = useState("team");
 
@@ -54,9 +52,7 @@ export default function Home() {
 
       if (response.ok) {
         setTeamMembers((previousMembers) =>
-          previousMembers.filter(
-            (member) => member.id !== id
-          )
+          previousMembers.filter((member) => member.id !== id)
         );
 
         await fetch(
@@ -77,9 +73,7 @@ export default function Home() {
           }
         );
 
-        setRefreshNotifications(
-          (previousValue) => previousValue + 1
-        );
+        setRefreshNotifications((previousValue) => previousValue + 1);
       }
     } catch (error) {
       console.error("Error deleting member:", error);
@@ -87,9 +81,7 @@ export default function Home() {
   }
 
   function handleInviteSent() {
-    setRefreshNotifications(
-      (previousValue) => previousValue + 1
-    );
+    setRefreshNotifications((previousValue) => previousValue + 1);
   }
 
   function handleTeamMemberAdded(newMember: TeamMember) {
@@ -104,15 +96,9 @@ export default function Home() {
       <TeamSidebar />
 
       <section className="flex-1 p-10">
-        <h1 className="text-4xl font-bold mb-6">
-          Team
-        </h1>
+        <h1 className="text-4xl font-bold mb-6">Team</h1>
 
         <div className="flex gap-8 mb-8 text-sm text-gray-500">
-          <button>
-            General
-          </button>
-
           <button
             onClick={() => setActiveTab("team")}
             className={
@@ -122,10 +108,6 @@ export default function Home() {
             }
           >
             Team
-          </button>
-
-          <button>
-            Password
           </button>
 
           <button
@@ -159,9 +141,7 @@ export default function Home() {
                   </div>
 
                   <p>Name</p>
-
                   <p>Role</p>
-
                   <div></div>
                 </div>
               </div>
@@ -189,9 +169,7 @@ export default function Home() {
         )}
 
         {activeTab === "notifications" && (
-          <NotificationsList
-            refreshTrigger={refreshNotifications}
-          />
+          <NotificationsList refreshTrigger={refreshNotifications} />
         )}
       </section>
     </main>
