@@ -1,20 +1,28 @@
 'use client';
-
-import React, { useState } from 'react';
+ 
+import React, { useState, useEffect } from 'react'; // <-- Lägg till useEffect här
 import Button from '@/Components/Button';
-
-interface AlmostThereProps {
-  email: string;
-}
-
-const AlmostThere = ({ email }: AlmostThereProps) => {
+import { useRouter } from "next/navigation";
+ 
+// Vi behöver inte längre interfacet AlmostThereProps eftersom vi läser lokalt!
+const AlmostThere = () => { 
+  const [email, setEmail] = useState(''); // <-- Skapa ett state för e-posten
+ const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     password: '',
     confirmPassword: '',
   });
-
+ 
+  // Hämta e-posten från localStorage direkt när sidan laddas in
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("verificationEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
+    }
+  }, []);
+ 
   const handleComplete = async () => {
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
@@ -35,7 +43,7 @@ const AlmostThere = ({ email }: AlmostThereProps) => {
       });
 
       if (response.ok) {
-        window.location.href = '/dashboard';
+        router.push("/auth/login");
       } else {
         const data = await response.json();
         alert("Registration failed: " + JSON.stringify(data));

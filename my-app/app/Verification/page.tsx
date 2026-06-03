@@ -51,16 +51,17 @@ function Page() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email,
+            email, // är det här???
             code: verificationCode,
           }),
         },
       );
 
-      if (response.ok) {
-        router.push("/auth/almost-there");
-        return;
-      }
+     if (response.ok) {
+  // ÄNDRAT: Skicka med e-posten som en query-parameter i länken!
+  router.push(`/auth/almost-there?email=${encodeURIComponent(email)}`);
+  return;
+}
 
       setError("Invalid verification code");
     } catch (error) {
