@@ -10,11 +10,15 @@ type SkillType = {
 function SkillsContainer() {
   useEffect(() => {
     getSkills();
+    getProfile();
   }, []);
   const [skills, setSkills] = useState<SkillType[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [profileId, setProfileId] = useState<number | null>(null);
   const [selectedSkills, setSelectedSkills] = useState<SkillType[]>([]);
+  const PROFILE_API_URL = "https://profileinfo-webapp.azurewebsites.net";
+  const TEST_USER_ID = "101c140c-df61-44a7-9ccd-48c24a25a670";
+  const API_KEY = "ProfileInfoSecretKey2026";
 
   const getSkills = async () => {
     try {
@@ -34,6 +38,44 @@ function SkillsContainer() {
     }
   };
 
+  const getUserSkills = async (profileId: number) => {
+    try {
+      const response = await fetch(
+        `https://shikoskillsapi.azurewebsites.net/UserSkills/${profileId}`,
+      );
+
+      const data = await response.json();
+
+      setSelectedSkills(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getProfile = async () => {
+    try {
+      const response = await fetch(`${PROFILE_API_URL}/GetAllProfiles`, {
+        headers: {
+          "X-API-KEY": API_KEY,
+        },
+      });
+
+      const profiles = await response.json();
+
+      const currentUserProfile = profiles.find(
+        (profile: any) => profile.userId === TEST_USER_ID,
+      );
+
+      if (currentUserProfile) {
+        setProfileId(currentUserProfile.id);
+
+        getUserSkills(currentUserProfile.id);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="font-bold text-2xl">
       Skills
@@ -46,9 +88,29 @@ function SkillsContainer() {
             {skills.map((skill) => (
               <div
                 key={skill.id}
-                onClick={() => {
-                  setSelectedSkills((prev) => [...prev, skill]);
-                  setShowDropdown(false);
+                onClick={async () => {
+                  if (!profileId) return;
+
+                  try {
+                    await fetch(
+                      "https://shikoskillsapi.azurewebsites.net/AddUserSkill",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          profileId: profileId,
+                          skillId: skill.id,
+                        }),
+                      },
+                    );
+
+                    setSelectedSkills((prev) => [...prev, skill]);
+                    setShowDropdown(false);
+                  } catch (error) {
+                    console.log(error);
+                  }
                 }}
                 className="cursor-pointer hover:bg-gray-100 p-1"
               >
