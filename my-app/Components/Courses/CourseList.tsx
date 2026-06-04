@@ -18,7 +18,7 @@ async function getCourses(): Promise<Course[]> {
   const response = await fetch(
     "https://shiko-webapp.azurewebsites.net/api/courses",
     {
-      cache: "no-store",
+       next: { revalidate: 60 },
     }
   );
 
@@ -33,7 +33,7 @@ async function getAuthors(): Promise<CourseAuthor[]> {
   const response = await fetch(
     "https://shiko-courseauthor-webapp.azurewebsites.net/api/course-authors",
     {
-      cache: "no-store",
+       next: { revalidate: 60 },
     }
   );
 
