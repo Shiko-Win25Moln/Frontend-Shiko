@@ -9,6 +9,11 @@ type JwtPayload = {
   "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"?: string;
 };
 
+type Course = {
+  id: number;
+  title: string;
+};
+
 function getRole(decoded: JwtPayload) {
   return (
     decoded.role ??
@@ -33,7 +38,10 @@ export default function AdminCreatePanel() {
 
   const [skillName, setSkillName] = useState("");
 
+  const [courses, setCourses] = useState<Course[]>([]);
+
   useEffect(() => {
+    getCourses();
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -52,6 +60,26 @@ export default function AdminCreatePanel() {
 
     setChecked(true);
   }, []);
+
+
+  const getCourses = async () => {
+    try {
+        const response = await fetch(
+        "https://shiko-webapp.azurewebsites.net/api/courses"
+        );
+
+            if (!response.ok) {
+            console.error("Could not fetch courses");
+            return;
+            }
+
+            const data = await response.json();
+            setCourses(data);
+        } catch (error) {
+            console.error("Failed to fetch courses:", error);
+        }
+    };
+
 
   const createAuthor = async () => {
     const token = localStorage.getItem("token");
@@ -244,13 +272,19 @@ export default function AdminCreatePanel() {
         </h2>
 
         <div className="mt-6 space-y-4">
-          <input
-            value={faqCourseId}
-            onChange={(e) => setFaqCourseId(e.target.value)}
-            placeholder="Course id"
-            type="number"
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none"
-          />
+          <select
+                value={faqCourseId}
+                onChange={(e) => setFaqCourseId(e.target.value)}
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none"
+                >
+                <option value="">Select course</option>
+
+                {courses.map((course) => (
+                    <option key={course.id} value={course.id}>
+                    {course.id} - {course.title}
+                    </option>
+                ))}
+            </select>
 
           <input
             value={faqQuestion}
