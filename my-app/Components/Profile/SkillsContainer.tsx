@@ -34,7 +34,7 @@ function SkillsContainer() {
 
       setSkills(data);
     } catch (error) {
-      console.log("FEL:", error);
+      console.log("Wrong:", error);
     }
   };
 
@@ -75,13 +75,43 @@ function SkillsContainer() {
       console.log(error);
     }
   };
+  const removeSkill = async (skillId: number) => {
+    if (!profileId) return;
+
+    try {
+      const respone = await fetch(
+        `https://shikoskillsapi.azurewebsites.net/userSkilss/${profileId}/${skillId}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+    
+      if (respone.ok) {
+        setSelectedSkills((prev) =>
+          prev.filter((skill) => skill.id !== skillId),
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="font-bold text-2xl">
       Skills
       <div className="flex flex-wrap gap-2 pt-3 pb-3">
         {selectedSkills.map((skill) => (
-          <Skill key={skill.id} id={skill.id} name={skill.name} />
+          <div key={skill.id} className="gap-1">
+            <Skill id={skill.id} name={skill.name} />
+
+            <button
+              onClick={() => removeSkill(skill.id)}
+              className="w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center"
+            >
+              ×
+            </button>
+          </div>
         ))}
         {showDropdown && (
           <div className="border rounded p-2 bg-white">
