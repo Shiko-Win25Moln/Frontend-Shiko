@@ -1,45 +1,36 @@
 'use client';
-
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+ 
+import React, { useState, useEffect } from 'react'; // <-- Lägg till useEffect här
 import Button from '@/Components/Button';
-
-interface AlmostThereProps {
-  email?: string;
-}
-
-const AlmostThere = ({ email }: AlmostThereProps) => {
-  const searchParams = useSearchParams();
-  const [activeEmail, setActiveEmail] = useState(email || '');
-
+import { useRouter } from "next/navigation";
+ 
+// Vi behöver inte längre interfacet AlmostThereProps eftersom vi läser lokalt!
+const AlmostThere = () => {
+  const [email, setEmail] = useState(''); // <-- Skapa ett state för e-posten
+ const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     password: '',
     confirmPassword: '',
   });
-
-  // Plocka ut e-postadressen som skickades med från URL-strängen
+ 
+  // Hämta e-posten från localStorage direkt när sidan laddas in
   useEffect(() => {
-    const emailFromUrl = searchParams.get('email');
-    if (emailFromUrl) {
-      setActiveEmail(emailFromUrl);
-    } else if (!activeEmail) {
-      const savedEmail = localStorage.getItem("verificationEmail");
-      if (savedEmail) {
-        setActiveEmail(savedEmail);
-      }
+    const savedEmail = localStorage.getItem("verificationEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
     }
-  }, [searchParams, activeEmail]);
-
+  }, []);
+ 
   const handleComplete = async () => {
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-
+ 
     try {
-      // Anropet mot din skarpa Azure-URL från Scalar
+      // 1. ÄNDRAT: Nu pekar anropet mot din skarpa Azure-URL från Scalar!
       const response = await fetch('https://lms-auth-rasmus-cvcpfxgmd8hwhuas.spaincentral-01.azurewebsites.net/api/Users/register-full', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,12 +38,12 @@ const AlmostThere = ({ email }: AlmostThereProps) => {
           firstName: formData.firstName,
           lastName: formData.lastName,
           password: formData.password,
-          email: activeEmail, 
+          email: email,
         }),
       });
-
+ 
       if (response.ok) {
-        window.location.href = '/dashboard';
+        router.push("/auth/login");
       } else {
         const data = await response.json();
         alert("Registration failed: " + JSON.stringify(data));
@@ -61,30 +52,30 @@ const AlmostThere = ({ email }: AlmostThereProps) => {
       console.error('Anropet misslyckades:', error);
     }
   };
-
+ 
   return (
     <div className="flex min-h-screen w-full bg-white overflow-hidden">
-      
+     
       {/* VÄNSTER HALVA (50%) */}
       <div className="hidden lg:flex lg:w-1/2 bg-neutral-100 items-center justify-center overflow-hidden">
-        <img 
-          src="/Shiko-login.svg" 
-          alt="Shiko Design" 
-          className="w-full h-full object-cover" 
+        <img
+          src="/Shiko-login.svg"
+          alt="Shiko Design"
+          className="w-full h-full object-cover"
         />
       </div>
-
+ 
       {/* HÖGER HALVA (50%) */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16 bg-white">
         <div className="max-w-md w-full">
           <h2 className="text-3xl font-bold mb-2 text-[#111827]">Almost there!</h2>
           <p className="text-gray-500 mb-8">Please complete your profile to get started.</p>
-          
+         
           <div className="space-y-4">
             <div className="flex gap-4">
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                <input 
+                <input
                   type="text"
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-shiko-orange outline-none"
                   placeholder="John"
@@ -93,7 +84,7 @@ const AlmostThere = ({ email }: AlmostThereProps) => {
               </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                <input 
+                <input
                   type="text"
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-shiko-orange outline-none"
                   placeholder="Doe"
@@ -101,36 +92,37 @@ const AlmostThere = ({ email }: AlmostThereProps) => {
                 />
               </div>
             </div>
-
+ 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input 
+              <input
                 type="password"
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-shiko-orange outline-none"
                 placeholder="••••••••"
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
               />
             </div>
-
+ 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-              <input 
+              <input
                 type="password"
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-shiko-orange outline-none"
                 placeholder="••••••••"
                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
               />
             </div>
-            
+           
+            {/* 2. ÄNDRAT: Borttaget className som inte stöds av komponenten, och lagt allt på en rad för ren string-child */}
             <div className="pt-2">
               <Button onClick={handleComplete} variant="orange" size="md">Complete Registration</Button>
             </div>
           </div>
         </div>
       </div>
-
+ 
     </div>
   );
 };
-
+ 
 export default AlmostThere;
