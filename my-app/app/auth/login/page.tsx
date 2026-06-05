@@ -1,19 +1,19 @@
 'use client';
-
+ 
 import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Button from '@/Components/Button';
-
+ 
 function PasswordForm() {
     const searchParams = useSearchParams();
-
+ 
     // 🚀 FIXAT: Vi initierar staten direkt från URL:en. Ingen useEffect behövs, vilket tar bort ESLint-felet!
     const [email, setEmail] = useState(() => searchParams.get('email') || '');
     const [password, setPassword] = useState('');
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isEmailPreFilled] = useState(() => !!searchParams.get('email'));
-
+ 
     const handleSignIn = async () => {
         if (!email) {
             alert("E-postadress saknas.");
@@ -23,9 +23,9 @@ function PasswordForm() {
             alert("Ange ditt lösenord.");
             return;
         }
-
+ 
         setLoading(true);
-
+ 
         try {
             const response = await fetch('https://lms-auth-rasmus-cvcpfxgmd8hwhuas.spaincentral-01.azurewebsites.net/api/Users/login', {
                 method: 'POST',
@@ -35,15 +35,15 @@ function PasswordForm() {
                     password: password,
                 }),
             });
-
+ 
             if (response.ok) {
                 const data = await response.json();
-
+ 
                 if (data.accessToken) {
                     localStorage.setItem('token', data.accessToken);
                 }
-
-                window.location.href = '/dashboard';
+ 
+                window.location.href = ('/');
             } else {
                 const errorData = await response.json().catch(() => ({}));
                 alert("Inloggningen misslyckades: " + (errorData.title || "Fel lösenord"));
@@ -55,7 +55,7 @@ function PasswordForm() {
             setLoading(false);
         }
     };
-
+ 
     return (
         <div className="flex min-h-screen w-full bg-[#fcfcfc] p-4 lg:p-6 font-sans antialiased text-[#1e293b]">
             {/* VÄNSTER HALVA - Bilden */}
@@ -70,13 +70,13 @@ function PasswordForm() {
                     </span>
                 </div>
             </div>
-
+ 
             {/* HÖGER HALVA - Formuläret */}
             <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8 lg:p-16 bg-[#fcfcfc]">
                 <div className="max-w-md w-full">
                     <h2 className="text-4xl font-semibold mb-2 text-[#1e293b]">Enter Password</h2>
                     <p className="text-gray-400 text-sm mb-10">Please enter your password to log in to your account.</p>
-
+ 
                     <div className="space-y-5">
                         <div>
                             <label className="block text-sm font-semibold text-[#1e293b] mb-2">Email address</label>
@@ -96,7 +96,7 @@ function PasswordForm() {
                                 />
                             </div>
                         </div>
-
+ 
                         <div>
                             <label className="block text-sm font-semibold text-[#1e293b] mb-2">Password</label>
                             <div className="relative">
@@ -114,7 +114,7 @@ function PasswordForm() {
                                 />
                             </div>
                         </div>
-
+ 
                         <div className="flex items-center justify-between pt-1">
                             <label className="flex items-center gap-2 cursor-pointer select-none">
                                 <input type="checkbox" checked={keepLoggedIn} onChange={(e) => setKeepLoggedIn(e.target.checked)} className="w-4 h-4 rounded text-[#f05a30] focus:ring-[#f05a30] border-gray-300 transition-all accent-[#f05a30]" />
@@ -122,7 +122,7 @@ function PasswordForm() {
                             </label>
                             <a href="/auth/forgot-password" className="text-xs font-medium text-[#f05a30] hover:underline">Forgot your password?</a>
                         </div>
-
+ 
                         <div className="pt-2">
                             <Button onClick={handleSignIn} disabled={loading} variant="orange" size="md">{loading ? 'Signing in...' : 'Sign In'}</Button>
                         </div>
@@ -132,7 +132,7 @@ function PasswordForm() {
         </div>
     );
 }
-
+ 
 export default function PasswordPage() {
     return (
         <Suspense fallback={<div className="p-6 text-center text-xs text-gray-400">Loading auth form...</div>}>
