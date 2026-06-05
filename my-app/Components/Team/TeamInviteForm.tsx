@@ -148,7 +148,6 @@ export default function TeamInviteForm({
             </button>
           </div>
 
-          <p className="mt-4 text-sm font-medium">+ Add another</p>
 
           {message && (
             <p className="mt-4 text-sm text-green-600">{message}</p>

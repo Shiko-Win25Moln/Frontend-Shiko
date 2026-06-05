@@ -9,6 +9,11 @@ type JwtPayload = {
   "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"?: string;
 };
 
+type Course = {
+  id: number;
+  title: string;
+};
+
 function getRole(decoded: JwtPayload) {
   return (
     decoded.role ??
@@ -31,7 +36,12 @@ export default function AdminCreatePanel() {
   const [faqQuestion, setFaqQuestion] = useState("");
   const [faqAnswer, setFaqAnswer] = useState("");
 
+  const [skillName, setSkillName] = useState("");
+
+  const [courses, setCourses] = useState<Course[]>([]);
+
   useEffect(() => {
+    getCourses();
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -40,14 +50,36 @@ export default function AdminCreatePanel() {
     }
 
     try {
-      const decoded = jwtDecode<JwtPayload>(token);
-      setIsAdmin(getRole(decoded) === "Admin");
+        const decoded = jwtDecode<JwtPayload>(token);
+        const role = getRole(decoded);
+
+        setIsAdmin(role === "Admin" || role === "Administrator");
     } catch {
-      setIsAdmin(false);
+    setIsAdmin(false);
     }
 
     setChecked(true);
   }, []);
+
+
+  const getCourses = async () => {
+    try {
+        const response = await fetch(
+        "https://shiko-webapp.azurewebsites.net/api/courses"
+        );
+
+            if (!response.ok) {
+            console.error("Could not fetch courses");
+            return;
+            }
+
+            const data = await response.json();
+            setCourses(data);
+        } catch (error) {
+            console.error("Failed to fetch courses:", error);
+        }
+    };
+
 
   const createAuthor = async () => {
     const token = localStorage.getItem("token");
@@ -127,6 +159,27 @@ export default function AdminCreatePanel() {
     setFaqQuestion("");
     setFaqAnswer("");
   };
+
+    const createSkill = async () => {
+        const response = await fetch("https://shikoskillsapi.azurewebsites.net/AddSkills", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+            name: skillName,
+            }),
+        });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        alert(`Could not create skill. Status: ${response.status}. ${errorText}`);
+        return;
+    }
+
+    alert("Skill created!");
+    setSkillName("");
+    };
 
   if (!checked) {
     return <p className="mt-10 text-[#8A8A8A]">Loading...</p>;
@@ -219,13 +272,19 @@ export default function AdminCreatePanel() {
         </h2>
 
         <div className="mt-6 space-y-4">
-          <input
-            value={faqCourseId}
-            onChange={(e) => setFaqCourseId(e.target.value)}
-            placeholder="Course id"
-            type="number"
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none"
-          />
+          <select
+                value={faqCourseId}
+                onChange={(e) => setFaqCourseId(e.target.value)}
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none"
+                >
+                <option value="">Select course</option>
+
+                {courses.map((course) => (
+                    <option key={course.id} value={course.id}>
+                    {course.id} - {course.title}
+                    </option>
+                ))}
+            </select>
 
           <input
             value={faqQuestion}
@@ -249,6 +308,27 @@ export default function AdminCreatePanel() {
           </button>
         </div>
       </article>
+      <article className="rounded-3xl bg-white p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-[#252B42]">
+                Create skill
+            </h2>
+
+            <div className="mt-6 space-y-4">
+                <input
+                value={skillName}
+                onChange={(e) => setSkillName(e.target.value)}
+                placeholder="Skill name"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none"
+                />
+
+                <button
+                onClick={createSkill}
+                className="rounded-xl bg-orange-500 px-5 py-3 font-semibold text-white hover:bg-orange-600"
+                >
+                Create skill
+                </button>
+            </div>
+        </article>
 
       
     </section>
