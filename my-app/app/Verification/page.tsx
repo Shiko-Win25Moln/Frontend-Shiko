@@ -12,6 +12,8 @@ function Page() {
 
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
 
+  const API_KEY = "PeruanMannnnnolito123"
+
   const handleChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
 
@@ -44,11 +46,12 @@ function Page() {
       }
 
       const response = await fetch(
-        "https://shikoverificationapi.azurewebsites.net/api/email-verification/verify",
+        "https://shikoverificationapi.azurewebsites.net/api/email-verification/verify", 
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-API-KEY": API_KEY,
           },
           body: JSON.stringify({
             email, // är det här???
@@ -57,16 +60,50 @@ function Page() {
         },
       );
 
-     if (response.ok) {
-  // ÄNDRAT: Skicka med e-posten som en query-parameter i länken!
-  router.push(`/auth/almost-there?email=${encodeURIComponent(email)}`);
-  return;
-}
+      if (response.ok) {
+        // ÄNDRAT: Skicka med e-posten som en query-parameter i länken!
+        router.push(`/auth/almost-there?email=${encodeURIComponent(email)}`);
+        return;
+      }
 
       setError("Invalid verification code");
     } catch (error) {
       console.error(error);
       setError("Something went wrong");
+    }
+  };
+
+  const resendCode = async () => {
+    try {
+      const email = localStorage.getItem("verificationEmail");
+
+      if (!email) {
+        setError("No email found");
+        return;
+      }
+
+      const response = await fetch(
+        "https://shikoverificationapi.azurewebsites.net/api/email-verification/request",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-API-KEY": API_KEY,
+          },
+          body: JSON.stringify({
+            email,
+          }),
+        },
+      );
+
+      if (response.ok) {
+        alert("A new verification code has been sent.");
+      } else {
+        setError("Could not resend verification code.");
+      }
+    } catch (error) {
+      console.error(error);
+      setError("Something went wrong.");
     }
   };
 
@@ -150,6 +187,14 @@ function Page() {
                     "
               />
             ))}
+          </div>
+          <div>
+            <button
+              onClick={resendCode}
+              className="hover:underline text-red-400"
+            >
+              Resend Code
+            </button>
           </div>
 
           {error && (

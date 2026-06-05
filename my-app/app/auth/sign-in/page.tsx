@@ -1,7 +1,6 @@
 'use client';
-
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import Button from '@/Components/Button';
 
 export default function SignInPage() {
@@ -14,23 +13,20 @@ export default function SignInPage() {
             return;
         }
 
-        
         localStorage.setItem("verificationEmail", email);
 
         try {
-            
             await fetch("https://shikoverificationapi.azurewebsites.net/api/email-verification/request", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ email: email }), 
+                body: JSON.stringify({ email: email }),
             });
         } catch (error) {
             console.error("Backend error:", error);
         }
 
-        
         router.push("/Verification");
     };
 
@@ -38,12 +34,12 @@ export default function SignInPage() {
         <div className="flex min-h-screen w-full bg-[#fcfcfc] p-4 lg:p-6 font-sans antialiased text-[#1e293b]">
             {/* LEFT HALF - GRADIENT BOX WITH BACKGROUND IMAGE */}
             <div className="hidden lg:flex lg:w-1/2 relative rounded-3xl overflow-hidden shadow-sm bg-gradient-to-tr from-[#f05a30] to-[#ff8f6b]">
+
                 
-                {/* Denna bild täcker nu hela vänstra halvan */}
-                <img 
-                    src="/Shiko-login.svg" 
-                    alt="Shiko Design" 
-                    className="w-full h-full object-cover absolute inset-0 mix-blend-overlay opacity-90" 
+                <img
+                    src="/Shiko-login.svg"
+                    alt="Shiko Design"
+                    className="w-full h-full object-cover absolute inset-0 mix-blend-overlay opacity-90"
                 />
 
                 {/* Logotypen och namnet som flyter ovanpå bilden */}
@@ -85,33 +81,13 @@ export default function SignInPage() {
                             </div>
 
                             <div className="text-right mt-2">
-                                <a href="#" className="text-xs font-medium text-[#f05a30] hover:underline">
-                                    Forgot your email address?
+                                <a href="/auth/forgot-password" className="text-xs font-medium text-[#f05a30] hover:underline">
+                                    Forgot your password?
                                 </a>
                             </div>
                         </div>
 
                         <Button onClick={handleContinue} variant="orange" size="md">Continue</Button>
-
-                        <div className="relative flex py-6 items-center">
-                            <div className="flex-grow border-t border-gray-100"></div>
-                            <span className="flex-shrink mx-4 text-gray-400 text-xs font-normal">or continue with</span>
-                            <div className="flex-grow border-t border-gray-100"></div>
-                        </div>
-
-                        <button
-                            onClick={() => { }}
-                            className="w-full flex items-center justify-center gap-3 bg-[#f8fafc] hover:bg-[#f1f5f9] border border-transparent text-gray-600 font-medium py-3.5 rounded-xl transition-colors text-sm shadow-sm"
-                        >
-                            <svg className="w-4 h-4" viewBox="0 0 23 23">
-                                <path fill="#f35325" d="M0 0h11v11H0z" />
-                                <path fill="#81bc06" d="M12 0h11v11H12z" />
-                                <path fill="#05a6f0" d="M0 12h11v11H0z" />
-                                <path fill="#ffba08" d="M12 12h11v11H12z" />
-                            </svg>
-                            <span className="text-[#64748b]">Work or school account</span>
-                        </button>
-
                     </div>
                 </div>
             </div>
