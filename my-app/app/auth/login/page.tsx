@@ -43,7 +43,7 @@ function PasswordForm() {
                     localStorage.setItem('token', data.accessToken);
                 }
 
-                window.location.href = '/';
+                window.location.href = '/dashboard';
             } else {
                 const errorData = await response.json().catch(() => ({}));
                 alert("Inloggningen misslyckades: " + (errorData.title || "Fel lösenord"));
@@ -120,7 +120,7 @@ function PasswordForm() {
                                 <input type="checkbox" checked={keepLoggedIn} onChange={(e) => setKeepLoggedIn(e.target.checked)} className="w-4 h-4 rounded text-[#f05a30] focus:ring-[#f05a30] border-gray-300 transition-all accent-[#f05a30]" />
                                 <span className="text-xs text-gray-400 font-medium">Keep me logged in</span>
                             </label>
-                            <a href="#" className="text-xs font-medium text-[#f05a30] hover:underline">Forgot your password?</a>
+                            <a href="auth/forgot-password" className="text-xs font-medium text-[#f05a30] hover:underline">Forgot your password?</a>
                         </div>
 
                         <div className="pt-2">
