@@ -13,44 +13,59 @@ function getRole(decoded: JwtPayload) {
   );
 }
 
-export async function POST(request: Request) {
+function isAdminRole(role?: string) {
+  return role === "Admin" || role === "Administrator";
+}
+
+function isAuthorized(request: Request) {
   const authHeader = request.headers.get("authorization");
 
   if (!authHeader?.startsWith("Bearer ")) {
-    return NextResponse.json({ message: "Missing token" }, { status: 401 });
+    return false;
   }
 
   const token = authHeader.replace("Bearer ", "");
 
-  let decoded: JwtPayload;
-
   try {
-    decoded = jwtDecode<JwtPayload>(token);
-  } catch {
-    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
-  }
+    const decoded = jwtDecode<JwtPayload>(token);
+    const role = getRole(decoded);
 
-  if (getRole(decoded) !== "Administrator") {
+    return isAdminRole(role);
+  } catch {
+    return false;
+  }
+}
+
+type RouteParams = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+export async function DELETE(request: Request, { params }: RouteParams) {
+  if (!isAuthorized(request)) {
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   }
 
-  const body = await request.json();
+  const { id } = await params;
 
   const response = await fetch(
-    "https://shiko-courseauthor-webapp.azurewebsites.net/api/courses-authors",
+    `https://shiko-courseauthor-webapp.azurewebsites.net/api/course-authors/${id}`,
     {
-      method: "POST",
+      method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         "x-api-key": process.env.COURSE_AUTHOR_API_KEY!,
       },
-      body: JSON.stringify(body),
     }
   );
 
-  const data = await response.json().catch(() => null);
+  if (response.status === 204) {
+    return new NextResponse(null, { status: 204 });
+  }
 
-  return NextResponse.json(data, {
+  const data = await response.text();
+
+  return new NextResponse(data, {
     status: response.status,
   });
 }
