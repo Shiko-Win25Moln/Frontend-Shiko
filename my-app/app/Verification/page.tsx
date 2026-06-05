@@ -12,6 +12,8 @@ function Page() {
 
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
 
+  const API_KEY = "PeruanMannnnnolito123"
+
   const handleChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
 
@@ -44,11 +46,12 @@ function Page() {
       }
 
       const response = await fetch(
-        "https://shikoverificationapi.azurewebsites.net/api/email-verification/verify",
+        "https://shikoverificationapi.azurewebsites.net/api/email-verification/verify", 
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-API-KEY": API_KEY,
           },
           body: JSON.stringify({
             email, // är det här???
@@ -85,6 +88,7 @@ function Page() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-API-KEY": API_KEY,
           },
           body: JSON.stringify({
             email,

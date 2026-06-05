@@ -19,11 +19,16 @@ function SkillsContainer() {
   const PROFILE_API_URL = "https://profileinfo-webapp.azurewebsites.net";
   const TEST_USER_ID = "101c140c-df61-44a7-9ccd-48c24a25a670";
   const API_KEY = "ProfileInfoSecretKey2026";
+  const API_KEY2= "Peruanmannelito123"
 
   const getSkills = async () => {
     try {
       const response = await fetch(
-        "https://shikoskillsapi.azurewebsites.net/GetAllSkills",
+        "https://shikoskillsapi.azurewebsites.net/GetAllSkills", {
+          headers: {
+            "X-API-KEY" : API_KEY2
+          }
+        }
       );
 
       console.log("STATUS:", response.status);
