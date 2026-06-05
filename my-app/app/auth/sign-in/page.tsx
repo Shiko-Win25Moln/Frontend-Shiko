@@ -7,6 +7,7 @@ import Button from '@/Components/Button';
 export default function SignInPage() {
     const [email, setEmail] = useState('');
     const router = useRouter(); // Initiera routern
+   const API_KEY = "PeruanMannnnnolito123"
 
     const handleContinue = async () => {
         if (!email) {
@@ -23,6 +24,7 @@ export default function SignInPage() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                     "X-API-KEY": API_KEY,
                 },
                 body: JSON.stringify({ email: email }), 
             });
