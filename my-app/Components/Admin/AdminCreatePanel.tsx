@@ -241,26 +241,33 @@ export default function AdminCreatePanel() {
     };
 
     const createSkill = async () => {
-        const response = await fetch("https://shikoskillsapi.azurewebsites.net/AddUserSkill", {
+        if (!skillName) {
+            alert("Please enter a skill name.");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+
+        const response = await fetch("/api/admin/skills", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
             name: skillName,
             }),
         });
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        alert(`Could not create skill. Status: ${response.status}. ${errorText}`);
-        return;
-    }
+        if (!response.ok) {
+            const errorText = await response.text();
+            alert(`Could not create skill. Status: ${response.status}. ${errorText}`);
+            return;
+        }
 
-    alert("Skill created!");
-    setSkillName("");
+        alert("Skill created!");
+        setSkillName("");
     };
-
 
     const deleteSkill = async () => {
         if (!deleteSkillId) {
@@ -268,12 +275,14 @@ export default function AdminCreatePanel() {
             return;
         }
 
-        const response = await fetch(
-            `https://shikoskillsapi.azurewebsites.net/userSkilss/${deleteSkillId}`,
-            {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(`/api/admin/skills/${deleteSkillId}`, {
             method: "DELETE",
-            }
-        );
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+        });
 
         if (!response.ok) {
             const errorText = await response.text();
