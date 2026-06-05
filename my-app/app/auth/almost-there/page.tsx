@@ -1,19 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Button from '@/Components/Button';
 
 interface AlmostThereProps {
-  email: string;
+  email?: string;
 }
 
 const AlmostThere = ({ email }: AlmostThereProps) => {
+  const searchParams = useSearchParams();
+  const [activeEmail, setActiveEmail] = useState(email || '');
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     password: '',
     confirmPassword: '',
   });
+
+  // Plocka ut e-postadressen som skickades med från URL-strängen
+  useEffect(() => {
+    const emailFromUrl = searchParams.get('email');
+    if (emailFromUrl) {
+      setActiveEmail(emailFromUrl);
+    } else if (!activeEmail) {
+      const savedEmail = localStorage.getItem("verificationEmail");
+      if (savedEmail) {
+        setActiveEmail(savedEmail);
+      }
+    }
+  }, [searchParams, activeEmail]);
 
   const handleComplete = async () => {
     if (formData.password !== formData.confirmPassword) {
@@ -22,7 +39,7 @@ const AlmostThere = ({ email }: AlmostThereProps) => {
     }
 
     try {
-      // 1. ÄNDRAT: Nu pekar anropet mot din skarpa Azure-URL från Scalar!
+      // Anropet mot din skarpa Azure-URL från Scalar
       const response = await fetch('https://lms-auth-rasmus-cvcpfxgmd8hwhuas.spaincentral-01.azurewebsites.net/api/Users/register-full', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,7 +47,7 @@ const AlmostThere = ({ email }: AlmostThereProps) => {
           firstName: formData.firstName,
           lastName: formData.lastName,
           password: formData.password,
-          email: email, 
+          email: activeEmail, 
         }),
       });
 
@@ -105,7 +122,6 @@ const AlmostThere = ({ email }: AlmostThereProps) => {
               />
             </div>
             
-            {/* 2. ÄNDRAT: Borttaget className som inte stöds av komponenten, och lagt allt på en rad för ren string-child */}
             <div className="pt-2">
               <Button onClick={handleComplete} variant="orange" size="md">Complete Registration</Button>
             </div>

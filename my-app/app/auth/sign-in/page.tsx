@@ -81,8 +81,8 @@ export default function SignInPage() {
                             </div>
 
                             <div className="text-right mt-2">
-                                <a href="#" className="text-xs font-medium text-[#f05a30] hover:underline">
-                                    Forgot your email address?
+                                <a href="/auth/forgot-password" className="text-xs font-medium text-[#f05a30] hover:underline">
+                                    Forgot your password?
                                 </a>
                             </div>
                         </div>
