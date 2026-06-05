@@ -22,23 +22,28 @@ function getRole(decoded: JwtPayload) {
 }
 
 export default function AdminCreatePanel() {
-  const [checked, setChecked] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+    const [checked, setChecked] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
-  const [authorName, setAuthorName] = useState("");
-  const [authorImage, setAuthorImage] = useState("");
+    const [authorName, setAuthorName] = useState("");
+    const [authorImage, setAuthorImage] = useState("");
 
-  const [courseTitle, setCourseTitle] = useState("");
-  const [courseImageUrl, setCourseImageUrl] = useState("");
-  const [courseAuthorId, setCourseAuthorId] = useState("");
+    const [courseTitle, setCourseTitle] = useState("");
+    const [courseImageUrl, setCourseImageUrl] = useState("");
+    const [courseAuthorId, setCourseAuthorId] = useState("");
 
-  const [faqCourseId, setFaqCourseId] = useState("");
-  const [faqQuestion, setFaqQuestion] = useState("");
-  const [faqAnswer, setFaqAnswer] = useState("");
+    const [faqCourseId, setFaqCourseId] = useState("");
+    const [faqQuestion, setFaqQuestion] = useState("");
+    const [faqAnswer, setFaqAnswer] = useState("");
 
-  const [skillName, setSkillName] = useState("");
+    const [skillName, setSkillName] = useState("");
 
-  const [courses, setCourses] = useState<Course[]>([]);
+    const [courses, setCourses] = useState<Course[]>([]);
+
+    const [deleteFaqId, setDeleteFaqId] = useState("");
+    const [deleteAuthorId, setDeleteAuthorId] = useState("");
+    const [deleteCourseId, setDeleteCourseId] = useState("");
+    const [deleteSkillId, setDeleteSkillId] = useState("");
 
   useEffect(() => {
     getCourses();
@@ -106,6 +111,31 @@ export default function AdminCreatePanel() {
     setAuthorImage("");
   };
 
+  const deleteAuthor = async () => {
+        if (!deleteAuthorId) {
+            alert("Please enter an author id.");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(`/api/admin/course-authors/${deleteAuthorId}`, {
+            method: "DELETE",
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            alert(`Could not delete author. Status: ${response.status}. ${errorText}`);
+            return;
+        }
+
+        alert("Author deleted!");
+        setDeleteAuthorId("");
+    };
+
   const createCourse = async () => {
     const token = localStorage.getItem("token");
 
@@ -132,6 +162,31 @@ export default function AdminCreatePanel() {
     setCourseImageUrl("");
     setCourseAuthorId("");
   };
+
+  const deleteCourse = async () => {
+        if (!deleteCourseId) {
+            alert("Please enter a course id.");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(`/api/admin/courses/${deleteCourseId}`, {
+            method: "DELETE",
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            alert(`Could not delete course. Status: ${response.status}. ${errorText}`);
+            return;
+        }
+
+        alert("Course deleted!");
+        setDeleteCourseId("");
+    };
 
   const createFaq = async () => {
     const token = localStorage.getItem("token");
@@ -160,8 +215,33 @@ export default function AdminCreatePanel() {
     setFaqAnswer("");
   };
 
+  const deleteFaq = async () => {
+        if (!deleteFaqId) {
+            alert("Please enter a FAQ id.");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(`/api/admin/course-faqs/${deleteFaqId}`, {
+            method: "DELETE",
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            alert(`Could not delete FAQ. Status: ${response.status}. ${errorText}`);
+            return;
+        }
+
+        alert("FAQ deleted!");
+        setDeleteFaqId("");
+    };
+
     const createSkill = async () => {
-        const response = await fetch("https://shikoskillsapi.azurewebsites.net/AddSkills", {
+        const response = await fetch("https://shikoskillsapi.azurewebsites.net/AddUserSkill", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
@@ -179,6 +259,30 @@ export default function AdminCreatePanel() {
 
     alert("Skill created!");
     setSkillName("");
+    };
+
+
+    const deleteSkill = async () => {
+        if (!deleteSkillId) {
+            alert("Please enter a skill id.");
+            return;
+        }
+
+        const response = await fetch(
+            `https://shikoskillsapi.azurewebsites.net/userSkilss/${deleteSkillId}`,
+            {
+            method: "DELETE",
+            }
+        );
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            alert(`Could not delete skill. Status: ${response.status}. ${errorText}`);
+            return;
+        }
+
+        alert("Skill deleted!");
+        setDeleteSkillId("");
     };
 
   if (!checked) {
@@ -326,6 +430,98 @@ export default function AdminCreatePanel() {
                 className="rounded-xl bg-orange-500 px-5 py-3 font-semibold text-white hover:bg-orange-600"
                 >
                 Create skill
+                </button>
+            </div>
+        </article>
+
+        <article className="rounded-3xl bg-white p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-[#252B42]">
+                Delete FAQ
+            </h2>
+
+            <div className="mt-6 space-y-4">
+                <input
+                value={deleteFaqId}
+                onChange={(e) => setDeleteFaqId(e.target.value)}
+                placeholder="FAQ id"
+                type="number"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none"
+                />
+
+                <button
+                onClick={deleteFaq}
+                className="rounded-xl bg-red-500 px-5 py-3 font-semibold text-white hover:bg-red-600"
+                >
+                Delete FAQ
+                </button>
+            </div>
+        </article>
+
+        <article className="rounded-3xl bg-white p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-[#252B42]">
+                Delete course author
+            </h2>
+
+            <div className="mt-6 space-y-4">
+                <input
+                value={deleteAuthorId}
+                onChange={(e) => setDeleteAuthorId(e.target.value)}
+                placeholder="Author id"
+                type="number"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none"
+                />
+
+                <button
+                onClick={deleteAuthor}
+                className="rounded-xl bg-red-500 px-5 py-3 font-semibold text-white hover:bg-red-600"
+                >
+                Delete author
+                </button>
+            </div>
+        </article>
+
+        <article className="rounded-3xl bg-white p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-[#252B42]">
+                Delete course
+            </h2>
+
+            <div className="mt-6 space-y-4">
+                <input
+                value={deleteCourseId}
+                onChange={(e) => setDeleteCourseId(e.target.value)}
+                placeholder="Course id"
+                type="number"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none"
+                />
+
+                <button
+                onClick={deleteCourse}
+                className="rounded-xl bg-red-500 px-5 py-3 font-semibold text-white hover:bg-red-600"
+                >
+                Delete course
+                </button>
+            </div>
+        </article>
+
+        <article className="rounded-3xl bg-white p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-[#252B42]">
+                Delete skill
+            </h2>
+
+            <div className="mt-6 space-y-4">
+                <input
+                value={deleteSkillId}
+                onChange={(e) => setDeleteSkillId(e.target.value)}
+                placeholder="Skill id"
+                type="number"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none"
+                />
+
+                <button
+                onClick={deleteSkill}
+                className="rounded-xl bg-red-500 px-5 py-3 font-semibold text-white hover:bg-red-600"
+                >
+                Delete skill
                 </button>
             </div>
         </article>
