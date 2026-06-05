@@ -1,4 +1,3 @@
-import React from 'react'
 import Rating from '@/Components/StarRating/Rating'
 import CourseRating from '@/Components/StarRating/CourseRating'
 
@@ -7,13 +6,13 @@ type RatingResponse = {
     stars: number;
 }
 
-
-export default async function page() {
+const page = async () => {
     const courseId = 123;
 
-    const [ response, courseResponse ] = await Promise.all([
-        fetch("https://mikelstarrating.azurewebsites.net/rating"),
-        fetch(`https://mikelstarrating.azurewebsites.net/courserating/${courseId}`)
+    const [ response, courseResponse] = await Promise.all([
+        fetch("https://shiko-starrating-webbapp.azurewebsites.net/rating"),
+        // fetch("https://shiko-starrating-webbapp.azurewebsites.net/coursestars")
+        fetch(`https://shiko-starrating-webbapp.azurewebsites.net/coursestars/${courseId}`)
     ]);
 
     if (!response.ok || !courseResponse.ok) {
@@ -32,3 +31,5 @@ export default async function page() {
     </>
   )
 }
+
+export default page
