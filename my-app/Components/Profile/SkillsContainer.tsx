@@ -19,16 +19,17 @@ function SkillsContainer() {
   const PROFILE_API_URL = "https://profileinfo-webapp.azurewebsites.net";
   const TEST_USER_ID = "101c140c-df61-44a7-9ccd-48c24a25a670";
   const API_KEY = "ProfileInfoSecretKey2026";
-  const API_KEY2= "Peruanmannelito123"
+  const API_KEY2 = "Peruanmannelito123";
 
   const getSkills = async () => {
     try {
       const response = await fetch(
-        "https://shikoskillsapi.azurewebsites.net/GetAllSkills", {
+        "https://shikoskillsapi.azurewebsites.net/GetAllSkills",
+        {
           headers: {
-            "X-API-KEY" : API_KEY2
-          }
-        }
+            "X-API-KEY": API_KEY2,
+          },
+        },
       );
 
       console.log("STATUS:", response.status);
@@ -47,6 +48,11 @@ function SkillsContainer() {
     try {
       const response = await fetch(
         `https://shikoskillsapi.azurewebsites.net/UserSkills/${profileId}`,
+        {
+          headers: {
+            "X-API-KEY": API_KEY2,
+          },
+        },
       );
 
       const data = await response.json();
@@ -87,11 +93,13 @@ function SkillsContainer() {
       const respone = await fetch(
         `https://shikoskillsapi.azurewebsites.net/userSkilss/${profileId}/${skillId}`,
         {
+          headers: {
+            "X-API-KEY": API_KEY2,
+          },
           method: "DELETE",
         },
       );
 
-    
       if (respone.ok) {
         setSelectedSkills((prev) =>
           prev.filter((skill) => skill.id !== skillId),
@@ -133,6 +141,7 @@ function SkillsContainer() {
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json",
+                           "X-API-KEY": API_KEY2,
                         },
                         body: JSON.stringify({
                           profileId: profileId,
