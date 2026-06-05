@@ -113,7 +113,7 @@ const AlmostThere = () => {
               />
             </div>
            
-            {/* 2. ÄNDRAT: Borttaget className som inte stöds av komponenten, och lagt allt på en rad för ren string-child */}
+            
             <div className="pt-2">
               <Button onClick={handleComplete} variant="orange" size="md">Complete Registration</Button>
             </div>
